@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { gsap, useGSAP } from "../lib/gsap";
 import Magnetic from "./Magnetic";
 import SocialLinks from "./SocialLinks";
+import Logo from "./Logo";
 
 const links = [
   { label: "Início", href: "#inicio" },
@@ -67,12 +68,7 @@ export default function Navbar() {
       <nav aria-label="Principal" className="relative z-50 grid grid-cols-[1fr_auto] items-center gap-4 px-5 pt-5 md:grid-cols-[1fr_auto_1fr] md:px-8 md:pt-6">
         {/* Marca */}
         <a href="#inicio" data-reveal="nav" className="group flex items-center gap-2.5 justify-self-start" aria-label="JP Cassiano, voltar ao início">
-          <span className="display grid size-9 place-items-center rounded-full bg-bone text-[13px] font-bold tracking-tight text-ink">
-            JP
-          </span>
-          <span className="display text-[15px] font-medium uppercase tracking-[0.06em]">
-            Cassiano<sup className="ml-0.5 text-[9px] text-ember">®</sup>
-          </span>
+          <Logo className="h-5 w-auto text-bone md:h-[22px]" />
         </a>
 
         {/* Pílula de navegação (desktop) */}

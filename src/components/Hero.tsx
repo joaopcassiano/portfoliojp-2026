@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap, SplitText, useGSAP } from "../lib/gsap";
 import Magnetic from "./Magnetic";
 import Navbar, { ArrowIcon } from "./Navbar";
+import Logo from "./Logo";
 import SocialLinks from "./SocialLinks";
 import { scrollToY } from "../lib/lenis";
 import hero900Avif from "../assets/hero-900.avif";
@@ -242,11 +243,8 @@ export default function Hero() {
         {/* Some assim que a rolagem começa; deixa claro que o site carregou e que há algo a descobrir */}
         <div data-cue className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-between text-bone">
           <div className="flex items-center justify-between px-5 pt-5 md:px-8 md:pt-6">
-            <span data-cue-item className="flex items-center gap-2.5">
-              <span className="display grid size-9 place-items-center rounded-full bg-bone text-[13px] font-bold tracking-tight text-ink">JP</span>
-              <span className="display text-[15px] font-medium tracking-[0.06em] uppercase">
-                Cassiano<sup className="ml-0.5 text-[9px] text-ember">®</sup>
-              </span>
+            <span data-cue-item className="flex h-9 items-center">
+              <Logo className="h-5 w-auto text-bone md:h-[22px]" />
             </span>
             <span data-cue-item className="eyebrow hidden text-bone/70 sm:block">
               Portfólio ©2026
