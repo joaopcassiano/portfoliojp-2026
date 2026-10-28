@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText, useGSAP } from "../lib/gsap";
-import { scrollInOut } from "../lib/scrollFx";
+import { revealOnScroll } from "../lib/scrollFx";
 import Magnetic from "./Magnetic";
 import { ArrowIcon } from "./Navbar";
 import Stack from "./Stack";
@@ -46,115 +46,59 @@ export default function About() {
         if (!motion) return;
         gsap.set("[data-about-reveal]", { autoAlpha: 1 });
         const rnd = gsap.utils.random;
+        const vw = () => window.innerWidth;
 
-        // ── Abertura presa na tela: as palavras chegam espalhadas e montam a frase ──
+        // ── Abertura: as palavras chegam espalhadas e montam a frase (toca sozinha ao chegar) ──
         const statement = SplitText.create("[data-statement]", { type: "words" });
-        gsap
-          .timeline({
-            scrollTrigger: { trigger: "[data-about-intro]", start: "center center", end: "+=130%", pin: true, scrub: 1 },
-          })
-          .from("[data-about-eyebrow]", { x: -80, autoAlpha: 0, duration: 0.4, ease: "power3.out" }, 0)
-          .from(
-            statement.words,
-            {
-              x: () => rnd(-window.innerWidth * 0.45, window.innerWidth * 0.45),
-              y: () => rnd(-window.innerHeight * 0.4, window.innerHeight * 0.4),
-              rotation: () => rnd(-45, 45),
-              scale: () => rnd(0.4, 1.6),
-              autoAlpha: 0,
-              filter: "blur(14px)",
-              duration: 1,
-              ease: "power3.out",
-              stagger: { each: 0.025, from: "random" },
-            },
-            0,
-          )
-          // Depois de montada, a frase "acende" da primeira à última palavra
-          .fromTo(statement.words, { color: "#5f5c57" }, { color: "#ede9e3", stagger: 0.03, duration: 0.3, ease: "none" }, ">-0.1");
-        // Ao sair, as palavras se dispersam para cima
-        gsap.to(statement.words, {
-          y: () => rnd(-160, -60),
-          x: () => rnd(-60, 60),
-          rotation: () => rnd(-12, 12),
-          autoAlpha: 0,
-          filter: "blur(10px)",
-          stagger: { each: 0.01, from: "random" },
-          ease: "power1.in",
-          immediateRender: false,
-          scrollTrigger: { trigger: "[data-about-intro]", start: "bottom 30%", end: "bottom 0%", scrub: 0.8 },
-        });
-        scrollInOut("[data-about-eyebrow]", "[data-about-intro]", {
-          from: {},
-          exit: { x: -80, autoAlpha: 0 },
-          leave: ["bottom 30%", "bottom 5%"],
-        });
+        revealOnScroll("[data-about-eyebrow]", "[data-about-intro]", { x: -80, autoAlpha: 0 }, { start: "top 80%" });
+        revealOnScroll(
+          statement.words,
+          "[data-about-intro]",
+          {
+            x: () => rnd(-vw() * 0.4, vw() * 0.4),
+            y: () => rnd(-240, 240),
+            rotation: () => rnd(-40, 40),
+            scale: () => rnd(0.5, 1.5),
+            autoAlpha: 0,
+            filter: "blur(12px)",
+          },
+          { start: "top 80%", duration: 1.6, stagger: { each: 0.02, from: "random" } },
+        );
+        // O único efeito preso ao scroll: a frase passa de cinza para branco, palavra por palavra
+        gsap.fromTo(
+          statement.words,
+          { color: "#5f5c57" },
+          {
+            color: "#ede9e3",
+            stagger: 0.1,
+            ease: "none",
+            scrollTrigger: { trigger: "[data-statement]", start: "top 75%", end: "bottom 40%", scrub: true },
+          },
+        );
 
-        // ── Foto: chega da esquerda, inclinada, abrindo como uma cortina ──
-        scrollInOut("[data-about-figure]", "[data-about-figure-slot]", {
-          from: { x: () => -window.innerWidth * 0.5, rotation: -10, scale: 0.85 },
-          exit: { x: () => -window.innerWidth * 0.35, rotation: -6, autoAlpha: 0 },
-          enter: ["top 100%", "top 35%"],
-          leave: ["bottom 45%", "bottom -5%"],
-        });
-        gsap.fromTo(
-          "[data-about-photo]",
-          { clipPath: "inset(0% 100% 0% 0% round 20px)" },
-          {
-            clipPath: "inset(0% 0% 0% 0% round 20px)",
-            ease: "power2.out",
-            scrollTrigger: { trigger: "[data-about-figure-slot]", start: "top 95%", end: "top 40%", scrub: 0.8 },
-          },
-        );
-        gsap.fromTo(
-          "[data-about-photo] img",
-          { yPercent: -8, scale: 1.3 },
-          {
-            yPercent: 8,
-            scale: 1.1,
-            ease: "none",
-            scrollTrigger: { trigger: "[data-about-figure-slot]", start: "top bottom", end: "bottom top", scrub: true },
-          },
-        );
-        // A cor chega quando a foto está no meio da tela, como o rosto na hero
-        gsap.fromTo(
-          "[data-about-photo] img",
-          { filter: "grayscale(1) brightness(0.75)" },
-          {
-            filter: "grayscale(0) brightness(1)",
-            ease: "none",
-            scrollTrigger: { trigger: "[data-about-figure-slot]", start: "top 70%", end: "center 50%", scrub: true },
-          },
+        // ── Foto: só salta na tela, já pronta e colorida ──
+        revealOnScroll(
+          "[data-about-figure]",
+          "[data-about-figure-slot]",
+          { y: 80, scale: 0.6, autoAlpha: 0 },
+          { start: "top 80%", duration: 0.9, ease: "back.out(1.6)" },
         );
 
         // ── Parágrafos: as linhas deslizam da direita, saindo do desfoque ──
-        gsap.utils.toArray<HTMLElement>("[data-about-body] p").forEach((p) => {
+        gsap.utils.toArray<HTMLElement>("[data-about-body] p").forEach((p, i) => {
           const { lines } = SplitText.create(p, { type: "lines" });
-          scrollInOut(lines, p, {
-            from: { x: 160, autoAlpha: 0, filter: "blur(10px)" },
-            exit: { x: -120, autoAlpha: 0, filter: "blur(8px)" },
-            stagger: 0.1,
-            enter: ["top 95%", "top 60%"],
-            leave: ["bottom 30%", "bottom 0%"],
-          });
+          revealOnScroll(lines, p, { x: 140, autoAlpha: 0, filter: "blur(10px)" }, { stagger: 0.08, delay: i * 0.1 });
         });
 
         // ── Cartões: giram em 3D vindo da direita, como cartas sendo distribuídas ──
-        const cardFx = {
-          from: { x: 220, rotationY: -65, rotationZ: 6, autoAlpha: 0, transformOrigin: "100% 50%" },
-          exit: { x: -160, rotationY: 45, autoAlpha: 0, transformOrigin: "0% 50%" },
-        };
+        const cardFrom = { x: 200, rotationY: -65, rotationZ: 6, autoAlpha: 0, transformOrigin: "100% 50%" };
         if (wide) {
-          scrollInOut("[data-about-card]", "[data-about-cards]", { ...cardFx, stagger: 0.18, enter: ["top 98%", "top 55%"] });
+          revealOnScroll("[data-about-card]", "[data-about-cards]", cardFrom, { stagger: 0.15, duration: 1.4 });
         } else {
-          gsap.utils.toArray<HTMLElement>("[data-about-card]").forEach((card) => scrollInOut(card, card, cardFx));
+          gsap.utils.toArray<HTMLElement>("[data-about-card]").forEach((card) => revealOnScroll(card, card, cardFrom));
         }
 
-        scrollInOut("[data-about-cta]", "[data-about-ctas]", {
-          from: { x: 140, autoAlpha: 0 },
-          exit: { x: -100, autoAlpha: 0 },
-          stagger: 0.15,
-          leave: ["bottom 25%", "bottom 0%"],
-        });
+        revealOnScroll("[data-about-cta]", "[data-about-ctas]", { x: 120, autoAlpha: 0 }, { stagger: 0.12, start: "top 92%" });
 
         // ── Contador de repositórios: conta ao entrar e volta ao zero se a pessoa rolar para cima ──
         const counter = { n: 0 };
@@ -203,7 +147,7 @@ export default function About() {
           <figure data-about-figure>
             <div
               data-about-photo
-              className="relative aspect-[4/5] overflow-hidden rounded-[20px] bg-graphite [clip-path:inset(0%_0%_0%_0%_round_20px)]"
+              className="relative aspect-[4/5] overflow-hidden rounded-[20px] bg-graphite"
             >
               <picture>
                 <source type="image/avif" srcSet={`${hero900Avif} 900w, ${hero1672Avif} 1672w`} sizes="(min-width: 1024px) 40vw, 100vw" />

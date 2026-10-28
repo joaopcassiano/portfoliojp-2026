@@ -17,7 +17,7 @@ import {
   siVite,
 } from "simple-icons";
 import { gsap, useGSAP } from "../lib/gsap";
-import { scrollInOut } from "../lib/scrollFx";
+import { revealOnScroll } from "../lib/scrollFx";
 
 // C# e SQL Server não estão no simple-icons: o primeiro vira texto, o segundo um cilindro genérico
 const DATABASE =
@@ -74,54 +74,34 @@ export default function Stack() {
         // Montado antes do pin da hero: estes gatilhos são medidos depois dele
         const refreshPriority = -1;
 
-        scrollInOut("[data-stack-head] h3", "[data-stack-head]", {
-          from: { x: -120, autoAlpha: 0 },
-          exit: { x: -80, autoAlpha: 0 },
-          leave: ["top 0%", "top -15%"],
-          refreshPriority,
-        });
-        scrollInOut("[data-stack-count]", "[data-stack-head]", {
-          from: { x: 120, autoAlpha: 0 },
-          exit: { x: 80, autoAlpha: 0 },
-          leave: ["top 0%", "top -15%"],
-          refreshPriority,
-        });
-        scrollInOut("[data-stack-line]", "[data-stack-head]", {
-          from: { scaleX: 0 },
-          exit: { scaleX: 0, transformOrigin: "100% 50%" },
-          leave: ["top 0%", "top -15%"],
-          refreshPriority,
-        });
+        const opts = { refreshPriority };
+        revealOnScroll("[data-stack-head] h3", "[data-stack-head]", { x: -120, autoAlpha: 0 }, opts);
+        revealOnScroll("[data-stack-count]", "[data-stack-head]", { x: 120, autoAlpha: 0 }, opts);
+        revealOnScroll("[data-stack-line]", "[data-stack-head]", { scaleX: 0 }, { ...opts, duration: 1.6 });
 
-        // Cada cartão chega de um lado: esquerda, de baixo e direita; ao sair, volta para o seu lado
+        // Cada cartão chega de um lado: esquerda, de baixo e direita
         const cards = gsap.utils.toArray<HTMLElement>("[data-stack-card]");
         const vw = () => window.innerWidth;
         const sides = [
-          { from: { x: () => -vw() * 0.6, rotation: -14, autoAlpha: 0 }, exit: { x: () => -vw() * 0.4, rotation: -8, autoAlpha: 0 } },
-          { from: { y: 260, scale: 0.7, autoAlpha: 0 }, exit: { y: -200, scale: 0.85, autoAlpha: 0 } },
-          { from: { x: () => vw() * 0.6, rotation: 14, autoAlpha: 0 }, exit: { x: () => vw() * 0.4, rotation: 8, autoAlpha: 0 } },
+          { x: () => -vw() * 0.5, rotation: -14, autoAlpha: 0 },
+          { y: 240, scale: 0.7, autoAlpha: 0 },
+          { x: () => vw() * 0.5, rotation: 14, autoAlpha: 0 },
         ];
         cards.forEach((card, i) => {
           // O gatilho é o espaço do cartão (que não se move), para a medição não sofrer com a animação
           const slot = card.parentElement!;
           // No celular os cartões ficam empilhados: alternam entre esquerda e direita
-          const fx = wide ? sides[i % 3] : sides[i % 2 === 0 ? 0 : 2];
-          scrollInOut(card, wide ? "[data-stack-grid]" : slot, {
-            ...fx,
-            enter: wide ? ["top 100%", "top 45%"] : ["top 100%", "top 55%"],
-            leave: ["bottom 40%", "bottom -5%"],
-            refreshPriority,
-          });
+          const from = wide ? sides[i % 3] : sides[i % 2 === 0 ? 0 : 2];
+          const delay = wide ? i * 0.12 : 0;
+          revealOnScroll(card, wide ? "[data-stack-grid]" : slot, from, { ...opts, delay, duration: 1.5 });
 
-          // Itens entram alternando os lados, saindo do desfoque
-          gsap.from(card.querySelectorAll("[data-stack-item]"), {
-            x: (j: number) => (j % 2 === 0 ? -60 : 60),
-            autoAlpha: 0,
-            filter: "blur(6px)",
-            stagger: 0.1,
-            ease: "power2.out",
-            scrollTrigger: { trigger: slot, start: "top 80%", end: "top 30%", scrub: 0.8, refreshPriority },
-          });
+          // Itens entram alternando os lados, saindo do desfoque, logo depois do cartão
+          revealOnScroll(
+            card.querySelectorAll("[data-stack-item]"),
+            wide ? "[data-stack-grid]" : slot,
+            { x: (j: number) => (j % 2 === 0 ? -50 : 50), autoAlpha: 0, filter: "blur(6px)" },
+            { ...opts, delay: delay + 0.5, stagger: 0.06, duration: 1 },
+          );
         });
       });
 
