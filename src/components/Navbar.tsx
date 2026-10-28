@@ -86,7 +86,7 @@ export default function Navbar() {
                 aria-current={i === active ? "page" : undefined}
                 onPointerEnter={() => moveIndicator(i)}
                 onFocus={() => moveIndicator(i)}
-                className={`block rounded-full px-4 py-2 text-[13px] tracking-wide transition-colors duration-300 lg:px-5 ${
+                className={`block rounded-full px-4 py-2 text-sm transition-colors duration-300 lg:px-5 ${
                   i === active ? "text-bone" : "text-bone/60 hover:text-bone"
                 }`}
               >
@@ -140,9 +140,9 @@ export default function Navbar() {
                 href={l.href}
                 data-menu-link
                 onClick={toggleMenu}
-                className="display flex items-baseline gap-4 py-1 text-[13vw] leading-[1] font-light uppercase"
+                className="display flex items-baseline gap-4 py-1 text-[13vw] leading-[1]"
               >
-                <span className="font-mono text-xs text-ember">0{i + 1}</span>
+                <span className="text-sm font-medium tracking-normal text-ember tabular-nums">0{i + 1}</span>
                 {l.label}
               </a>
             </li>

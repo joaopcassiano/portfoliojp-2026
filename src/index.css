@@ -15,10 +15,9 @@
   --color-ember-soft: #ff8a63;
   --color-live: #3ddc84;
 
-  --font-display: "Archivo Variable", "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  /* Uma família só (Instrument Sans): a hierarquia vem de tamanho, peso e espaçamento */
+  --font-sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sans);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -64,16 +63,27 @@
     -webkit-backdrop-filter: blur(18px) saturate(140%);
   }
 
+  /* Escala tipográfica (razão ~1.25). Títulos em peso médio com tracking negativo;
+     rótulos pequenos em caixa normal, sem fonte mono. */
   .display {
     font-family: var(--font-display);
-    font-variation-settings: "wdth" 112;
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+
+  .heading {
+    font-family: var(--font-display);
+    font-weight: 450;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
   }
 
   .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.4;
   }
 
   /* Granulação analógica sobre a foto */

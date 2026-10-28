@@ -230,8 +230,7 @@ export default function Hero() {
           <p
             data-wordmark
             data-reveal
-            className="display translate-y-[22%] text-[17vw] leading-[0.8] font-black whitespace-nowrap text-bone/[0.07] uppercase md:text-[15.6vw]"
-            style={{ fontVariationSettings: '"wdth" 125' }}
+            className="display translate-y-[22%] text-[19vw] leading-[0.8] font-semibold whitespace-nowrap text-bone/[0.06] uppercase md:text-[17.5vw]"
           >
             Cassiano
           </p>
@@ -256,11 +255,7 @@ export default function Hero() {
               <span className="size-1.5 rounded-full bg-ember" />
               Design Developer
             </p>
-            <p data-cue-item className="display text-[clamp(36px,6vw,88px)] leading-[0.95] font-light tracking-[-0.02em] uppercase">
-              Chegue mais <span className="font-serif text-[1.08em] tracking-[-0.01em] normal-case italic">perto</span>
-              <span className="text-ember">.</span>
-            </p>
-            <p data-cue-item className="mt-4 max-w-[360px] text-[15px] text-bone/70">
+            <p data-cue-item className="max-w-[360px] text-base text-bone/80">
               Role a página para ver meus projetos.
             </p>
             <button
@@ -275,7 +270,7 @@ export default function Hero() {
               <span className="relative h-12 w-px overflow-hidden bg-bone/20 [@media(pointer:fine)]:hidden" aria-hidden="true">
                 <span className="absolute inset-x-0 top-0 h-1/2 animate-[scroll-cue_2s_cubic-bezier(0.65,0,0.35,1)_infinite] bg-ember" />
               </span>
-              <span className="eyebrow text-xs">Começar</span>
+              <span className="eyebrow">Começar</span>
             </button>
           </div>
         </div>
@@ -290,13 +285,13 @@ export default function Hero() {
               <span className="whitespace-nowrap">©2026</span>
             </div>
 
-            <h1 data-reveal className="display text-[clamp(44px,7.4vw,112px)] leading-[0.92] font-light tracking-[-0.02em] uppercase">
+            <h1 data-reveal className="display text-[clamp(52px,7.6vw,124px)] leading-[0.92]">
               <span data-headline className="block">
                 Design que
               </span>
               <span className="relative block overflow-hidden pb-[0.08em]">
                 <span className="sr-only">encanta, converte, se move, permanece.</span>
-                <span data-word-line aria-hidden="true" className="grid font-serif text-[1.08em] tracking-[-0.01em] normal-case italic">
+                <span data-word-line aria-hidden="true" className="grid text-mute">
                   {words.map((w) => (
                     <span key={w} data-word className="col-start-1 row-start-1 whitespace-nowrap">
                       {w.slice(0, -1)}
@@ -307,7 +302,7 @@ export default function Hero() {
               </span>
             </h1>
 
-            <p data-intro data-reveal className="mt-6 max-w-[420px] text-[15px] leading-relaxed text-bone/70 md:text-base">
+            <p data-intro data-reveal className="mt-8 max-w-[440px] text-base leading-relaxed text-bone/70 md:text-[17px]">
               Sou JP Cassiano, design developer. Desenho sites e produtos digitais e também escrevo o código, então o
               layout que você aprova é o mesmo que vai para o ar.
             </p>
@@ -349,7 +344,7 @@ export default function Hero() {
         >
           <p className="mb-3 flex items-center justify-between text-sm">
             <span>O que eu faço</span>
-            <span className="eyebrow text-dim">03</span>
+            <span className="eyebrow text-mute tabular-nums">03</span>
           </p>
           <ul className="flex flex-col gap-2">
             {services.map((s) => (
@@ -358,7 +353,7 @@ export default function Hero() {
                   href="#servicos"
                   className="glass group flex items-center gap-3 rounded-2xl p-2 pr-4 transition-colors duration-300 hover:border-bone/25 hover:bg-carbon/70"
                 >
-                  <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-bone/[0.06] font-mono text-xs text-mute transition-colors duration-300 group-hover:bg-ember group-hover:text-ink">
+                  <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-bone/[0.06] text-[13px] font-medium text-mute tabular-nums transition-colors duration-300 group-hover:bg-ember group-hover:text-ink">
                     {s.n}
                   </span>
                   <span className="min-w-0 flex-1">
@@ -403,12 +398,12 @@ export default function Hero() {
             </div>
             <div className="mt-4 flex items-end justify-between border-t border-bone/10 pt-3">
               <div>
-                <p className="eyebrow text-dim">Onde estou</p>
+                <p className="eyebrow text-mute">Onde estou</p>
                 <p className="mt-1 text-[13px] text-bone/85">Alfenas, MG</p>
               </div>
               <div className="text-right">
-                <p className="eyebrow text-dim">Hora local</p>
-                <p className="mt-1 font-mono text-[13px] text-bone/85 tabular-nums">{time} BRT</p>
+                <p className="eyebrow text-mute">Hora local</p>
+                <p className="mt-1 text-[13px] text-bone/85 tabular-nums">{time} BRT</p>
               </div>
             </div>
           </div>
