@@ -1,12 +1,9 @@
-import { siBehance, siGithub, siGmail, siInstagram, siWhatsapp } from "simple-icons";
+import { siGithub, siGmail, siInstagram } from "simple-icons";
 
-// TODO: Behance e WhatsApp ainda sem link real
 export const socials = [
   { label: "Instagram", href: "https://www.instagram.com/_9joaopedro/", path: siInstagram.path },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/jo%C3%A3o-pedro-pereira-cassiano/", path: null },
   { label: "GitHub", href: "https://github.com/joaopcassiano", path: siGithub.path },
-  { label: "Behance", href: "https://behance.net/", path: siBehance.path },
-  { label: "WhatsApp", href: "https://wa.me/", path: siWhatsapp.path },
   { label: "E-mail", href: "mailto:dev.jpcassiano@gmail.com", path: siGmail.path },
 ];
 
