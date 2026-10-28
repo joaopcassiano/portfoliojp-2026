@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, SplitText, useGSAP } from "../lib/gsap";
+import { scrollInOut } from "../lib/scrollFx";
 import Magnetic from "./Magnetic";
 import { ArrowIcon } from "./Navbar";
 import Stack from "./Stack";
@@ -40,49 +41,78 @@ export default function About() {
       if (!fontsReady) return;
       const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      mm.add({ motion: "(prefers-reduced-motion: no-preference)", wide: "(min-width: 640px)" }, (ctx) => {
+        const { motion, wide } = ctx.conditions as { motion: boolean; wide: boolean };
+        if (!motion) return;
         gsap.set("[data-about-reveal]", { autoAlpha: 1 });
+        const rnd = gsap.utils.random;
 
-        // ── Frase principal: as palavras "acendem" conforme a rolagem ──
+        // ── Abertura presa na tela: as palavras chegam espalhadas e montam a frase ──
         const statement = SplitText.create("[data-statement]", { type: "words" });
-        gsap.fromTo(
-          statement.words,
-          { opacity: 0.14 },
-          {
-            opacity: 1,
-            stagger: 0.1,
-            ease: "none",
-            scrollTrigger: { trigger: "[data-statement]", start: "top 80%", end: "bottom 45%", scrub: true },
-          },
-        );
-
-        gsap.from("[data-about-eyebrow]", {
-          y: 16,
+        gsap
+          .timeline({
+            scrollTrigger: { trigger: "[data-about-intro]", start: "center center", end: "+=130%", pin: true, scrub: 1 },
+          })
+          .from("[data-about-eyebrow]", { x: -80, autoAlpha: 0, duration: 0.4, ease: "power3.out" }, 0)
+          .from(
+            statement.words,
+            {
+              x: () => rnd(-window.innerWidth * 0.45, window.innerWidth * 0.45),
+              y: () => rnd(-window.innerHeight * 0.4, window.innerHeight * 0.4),
+              rotation: () => rnd(-45, 45),
+              scale: () => rnd(0.4, 1.6),
+              autoAlpha: 0,
+              filter: "blur(14px)",
+              duration: 1,
+              ease: "power3.out",
+              stagger: { each: 0.025, from: "random" },
+            },
+            0,
+          )
+          // Depois de montada, a frase "acende" da primeira à última palavra
+          .fromTo(statement.words, { color: "#5f5c57" }, { color: "#ede9e3", stagger: 0.03, duration: 0.3, ease: "none" }, ">-0.1");
+        // Ao sair, as palavras se dispersam para cima
+        gsap.to(statement.words, {
+          y: () => rnd(-160, -60),
+          x: () => rnd(-60, 60),
+          rotation: () => rnd(-12, 12),
           autoAlpha: 0,
-          duration: 1,
-          ease: "expo.out",
-          scrollTrigger: { trigger: "[data-about-eyebrow]", start: "top 85%" },
+          filter: "blur(10px)",
+          stagger: { each: 0.01, from: "random" },
+          ease: "power1.in",
+          immediateRender: false,
+          scrollTrigger: { trigger: "[data-about-intro]", start: "bottom 30%", end: "bottom 0%", scrub: 0.8 },
+        });
+        scrollInOut("[data-about-eyebrow]", "[data-about-intro]", {
+          from: {},
+          exit: { x: -80, autoAlpha: 0 },
+          leave: ["bottom 30%", "bottom 5%"],
         });
 
-        // ── Foto: abre de baixo para cima, desliza por dentro e ganha cor ──
+        // ── Foto: chega da esquerda, inclinada, abrindo como uma cortina ──
+        scrollInOut("[data-about-figure]", "[data-about-figure-slot]", {
+          from: { x: () => -window.innerWidth * 0.5, rotation: -10, scale: 0.85 },
+          exit: { x: () => -window.innerWidth * 0.35, rotation: -6, autoAlpha: 0 },
+          enter: ["top 100%", "top 35%"],
+          leave: ["bottom 45%", "bottom -5%"],
+        });
         gsap.fromTo(
           "[data-about-photo]",
-          { clipPath: "inset(100% 0% 0% 0% round 20px)" },
+          { clipPath: "inset(0% 100% 0% 0% round 20px)" },
           {
             clipPath: "inset(0% 0% 0% 0% round 20px)",
-            duration: 1.4,
-            ease: "expo.inOut",
-            scrollTrigger: { trigger: "[data-about-photo]", start: "top 80%" },
+            ease: "power2.out",
+            scrollTrigger: { trigger: "[data-about-figure-slot]", start: "top 95%", end: "top 40%", scrub: 0.8 },
           },
         );
         gsap.fromTo(
           "[data-about-photo] img",
-          { yPercent: -8, scale: 1.25 },
+          { yPercent: -8, scale: 1.3 },
           {
             yPercent: 8,
             scale: 1.1,
             ease: "none",
-            scrollTrigger: { trigger: "[data-about-photo]", start: "top bottom", end: "bottom top", scrub: true },
+            scrollTrigger: { trigger: "[data-about-figure-slot]", start: "top bottom", end: "bottom top", scrub: true },
           },
         );
         // A cor chega quando a foto está no meio da tela, como o rosto na hero
@@ -92,19 +122,41 @@ export default function About() {
           {
             filter: "grayscale(0) brightness(1)",
             ease: "none",
-            scrollTrigger: { trigger: "[data-about-photo]", start: "top 75%", end: "center 55%", scrub: true },
+            scrollTrigger: { trigger: "[data-about-figure-slot]", start: "top 70%", end: "center 50%", scrub: true },
           },
         );
 
-        // ── Texto, cartões e botões entram em sequência ──
-        const body = SplitText.create("[data-about-body] p", { type: "lines", mask: "lines" });
-        gsap
-          .timeline({ defaults: { ease: "expo.out", duration: 1.1 }, scrollTrigger: { trigger: "[data-about-body]", start: "top 80%" } })
-          .from(body.lines, { yPercent: 100, stagger: 0.06 })
-          .from("[data-about-card]", { y: 40, autoAlpha: 0, stagger: 0.12 }, "-=0.7")
-          .from("[data-about-cta]", { y: 24, autoAlpha: 0, stagger: 0.08 }, "-=0.8");
+        // ── Parágrafos: as linhas deslizam da direita, saindo do desfoque ──
+        gsap.utils.toArray<HTMLElement>("[data-about-body] p").forEach((p) => {
+          const { lines } = SplitText.create(p, { type: "lines" });
+          scrollInOut(lines, p, {
+            from: { x: 160, autoAlpha: 0, filter: "blur(10px)" },
+            exit: { x: -120, autoAlpha: 0, filter: "blur(8px)" },
+            stagger: 0.1,
+            enter: ["top 95%", "top 60%"],
+            leave: ["bottom 30%", "bottom 0%"],
+          });
+        });
 
-        // ── Contador de repositórios ──
+        // ── Cartões: giram em 3D vindo da direita, como cartas sendo distribuídas ──
+        const cardFx = {
+          from: { x: 220, rotationY: -65, rotationZ: 6, autoAlpha: 0, transformOrigin: "100% 50%" },
+          exit: { x: -160, rotationY: 45, autoAlpha: 0, transformOrigin: "0% 50%" },
+        };
+        if (wide) {
+          scrollInOut("[data-about-card]", "[data-about-cards]", { ...cardFx, stagger: 0.18, enter: ["top 98%", "top 55%"] });
+        } else {
+          gsap.utils.toArray<HTMLElement>("[data-about-card]").forEach((card) => scrollInOut(card, card, cardFx));
+        }
+
+        scrollInOut("[data-about-cta]", "[data-about-ctas]", {
+          from: { x: 140, autoAlpha: 0 },
+          exit: { x: -100, autoAlpha: 0 },
+          stagger: 0.15,
+          leave: ["bottom 25%", "bottom 0%"],
+        });
+
+        // ── Contador de repositórios: conta ao entrar e volta ao zero se a pessoa rolar para cima ──
         const counter = { n: 0 };
         const out = root.current!.querySelector<HTMLElement>("[data-repo-count]")!;
         gsap.to(counter, {
@@ -112,7 +164,7 @@ export default function About() {
           duration: 1.8,
           ease: "power3.out",
           onUpdate: () => (out.textContent = String(Math.round(counter.n))),
-          scrollTrigger: { trigger: out, start: "top 85%" },
+          scrollTrigger: { trigger: out, start: "top 85%", toggleActions: "play none none reverse" },
         });
       });
 
@@ -129,7 +181,7 @@ export default function About() {
   return (
     <section id="sobre" ref={root} aria-labelledby="sobre-titulo" className="relative overflow-hidden px-5 pt-28 pb-24 md:px-10 md:pt-40 md:pb-32 lg:px-14">
       {/* ── Abertura: rótulo + frase que acende no scroll ── */}
-      <div className="grid gap-8 lg:grid-cols-12">
+      <div data-about-intro className="grid gap-8 lg:grid-cols-12">
         <div data-about-eyebrow className="eyebrow flex items-center gap-3 self-start text-mute lg:col-span-3 lg:pt-5">
           <span className="text-ember">(01)</span>
           <span className="h-px w-8 bg-bone/20" />
@@ -147,29 +199,34 @@ export default function About() {
 
       {/* ── Foto + texto + números ── */}
       <div className="mt-20 grid gap-12 md:mt-28 lg:grid-cols-12 lg:gap-8">
-        <figure className="lg:col-span-5">
-          <div data-about-photo className="relative aspect-[4/5] overflow-hidden rounded-[20px] bg-graphite">
-            <picture>
-              <source type="image/avif" srcSet={`${hero900Avif} 900w, ${hero1672Avif} 1672w`} sizes="(min-width: 1024px) 40vw, 100vw" />
-              <img
-                src={hero1672Webp}
-                srcSet={`${hero900Webp} 900w, ${hero1672Webp} 1672w`}
-                sizes="(min-width: 1024px) 40vw, 100vw"
-                alt="Retrato de JP Cassiano visto de cima, olhando para a câmera"
-                loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover object-[52%_38%]"
-              />
-            </picture>
-            <div aria-hidden="true" className="grain pointer-events-none absolute inset-0 opacity-20" />
-          </div>
-          <figcaption className="eyebrow mt-4 flex items-center justify-between text-mute">
-            <span className="flex items-center gap-2">
-              <span className="size-1.5 rounded-full bg-ember" />
-              Alfenas, MG
-            </span>
-            <span>Design Developer</span>
-          </figcaption>
-        </figure>
+        <div data-about-figure-slot className="lg:col-span-5">
+          <figure data-about-figure>
+            <div
+              data-about-photo
+              className="relative aspect-[4/5] overflow-hidden rounded-[20px] bg-graphite [clip-path:inset(0%_0%_0%_0%_round_20px)]"
+            >
+              <picture>
+                <source type="image/avif" srcSet={`${hero900Avif} 900w, ${hero1672Avif} 1672w`} sizes="(min-width: 1024px) 40vw, 100vw" />
+                <img
+                  src={hero1672Webp}
+                  srcSet={`${hero900Webp} 900w, ${hero1672Webp} 1672w`}
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  alt="Retrato de JP Cassiano visto de cima, olhando para a câmera"
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover object-[52%_38%]"
+                />
+              </picture>
+              <div aria-hidden="true" className="grain pointer-events-none absolute inset-0 opacity-20" />
+            </div>
+            <figcaption className="eyebrow mt-4 flex items-center justify-between text-mute">
+              <span className="flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-ember" />
+                Alfenas, MG
+              </span>
+              <span>Design Developer</span>
+            </figcaption>
+          </figure>
+        </div>
 
         <div className="flex flex-col justify-end lg:col-span-6 lg:col-start-7">
           <div data-about-body className="max-w-[560px] space-y-5 text-base leading-relaxed text-bone/70 md:text-lg">
@@ -185,7 +242,7 @@ export default function About() {
             </p>
           </div>
 
-          <ul className="mt-10 grid gap-3 sm:grid-cols-3">
+          <ul data-about-cards className="mt-10 grid gap-3 [perspective:1200px] sm:grid-cols-3">
             <li data-about-card data-about-reveal className="glass flex flex-col justify-between gap-6 rounded-2xl p-5">
               <span className="eyebrow text-mute">GitHub</span>
               <span>
@@ -211,7 +268,7 @@ export default function About() {
             </li>
           </ul>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
+          <div data-about-ctas className="mt-10 flex flex-wrap items-center gap-3">
             <div data-about-cta data-about-reveal>
               <Magnetic>
                 <a
