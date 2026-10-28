@@ -1,13 +1,13 @@
 import { siBehance, siGithub, siGmail, siInstagram, siWhatsapp } from "simple-icons";
 
-// TODO: trocar pelos links reais do JP
+// TODO: Behance e WhatsApp ainda sem link real
 export const socials = [
-  { label: "Instagram", href: "https://instagram.com/", path: siInstagram.path },
-  { label: "LinkedIn", href: "https://linkedin.com/in/", path: null },
-  { label: "GitHub", href: "https://github.com/", path: siGithub.path },
+  { label: "Instagram", href: "https://www.instagram.com/_9joaopedro/", path: siInstagram.path },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/jo%C3%A3o-pedro-pereira-cassiano/", path: null },
+  { label: "GitHub", href: "https://github.com/joaopcassiano", path: siGithub.path },
   { label: "Behance", href: "https://behance.net/", path: siBehance.path },
   { label: "WhatsApp", href: "https://wa.me/", path: siWhatsapp.path },
-  { label: "E-mail", href: "mailto:contato@jpcassiano.com", path: siGmail.path },
+  { label: "E-mail", href: "mailto:dev.jpcassiano@gmail.com", path: siGmail.path },
 ];
 
 // O LinkedIn não está no simple-icons, então o ícone é desenhado à mão.

@@ -94,6 +94,13 @@
   100% { transform: translateY(200%); }
 }
 
+/* Rodinha do mouse no convite para rolar */
+@keyframes wheel {
+  0% { transform: translate(-50%, 0); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translate(-50%, 12px); opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
     visibility: visible;

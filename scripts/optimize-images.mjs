@@ -7,7 +7,7 @@ const widths = [900, 1672];
 
 for (const w of widths) {
   const img = sharp(src).resize({ width: w });
-  await img.clone().avif({ quality: 55 }).toFile(`${out}/hero-${w}.avif`);
-  await img.clone().webp({ quality: 80 }).toFile(`${out}/hero-${w}.webp`);
+  await img.clone().avif({ quality: 68 }).toFile(`${out}/hero-${w}.avif`);
+  await img.clone().webp({ quality: 88 }).toFile(`${out}/hero-${w}.webp`);
 }
 console.log("ok");
