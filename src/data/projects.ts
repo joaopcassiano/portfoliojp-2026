@@ -1,49 +1,48 @@
 // Projetos da seção Projetos.
-// TODO: trocar descrições e adicionar `image` quando os mockups/prints chegarem.
+import cuidadoDesktop from "../assets/projects/cuidado-desktop.webp";
+import cuidadoApp from "../assets/projects/cuidado-app.webp";
+import vortekDesktop from "../assets/projects/vortek-desktop.webp";
+import vortekMobile from "../assets/projects/vortek-mobile.webp";
+
 export type Project = {
   title: string;
   category: string;
   tags: string[];
   description: string;
   year: string;
+  /** Para onde o botão de seta leva (site publicado ou repositório). */
   href: string;
-  /** Caminho do print/mockup (ex.: import de src/assets). Sem imagem, mostra a moldura reservada. */
+  /** Endereço exibido na barra do navegador do mockup. */
+  url?: string;
+  /** Print da versão desktop. Sem imagem, mostra a moldura reservada. */
   image?: string;
+  /** Print de uma tela no celular, exibido numa moldura de telefone sobre o print desktop. */
+  mobileImage?: string;
 };
-
-const repo = (name: string) => `https://github.com/joaopcassiano/${name}`;
 
 export const projects: Project[] = [
   {
     title: "Cuidado+",
-    category: "Web",
+    category: "Landing page e app",
     tags: ["HTML", "CSS", "JavaScript"],
-    description: "Descrição do projeto em breve.",
+    description:
+      "Landing page de um app que ajuda familiares e cuidadores a acompanhar a rotina de idosos: consultas, medicamentos, lembretes e um assistente com IA.",
     year: "2026",
-    href: repo("cuidado-mais-web"),
+    href: "https://joaopcassiano.github.io/cuidado-mais-web/",
+    url: "https://joaopcassiano.github.io/cuidado-mais-web/",
+    image: cuidadoDesktop,
+    mobileImage: cuidadoApp,
   },
   {
-    title: "+Apoio",
-    category: "UI/UX Design",
-    tags: ["Figma", "JavaScript"],
-    description: "Descrição do projeto em breve.",
-    year: "2024",
-    href: repo("ATEX-VIII"),
-  },
-  {
-    title: "MyGastronomy",
-    category: "Web",
-    tags: ["JavaScript"],
-    description: "Descrição do projeto em breve.",
-    year: "2025",
-    href: repo("MyGastronomy"),
-  },
-  {
-    title: "BudgetBoss",
-    category: "Back-end",
-    tags: ["C#", ".NET"],
-    description: "Descrição do projeto em breve.",
-    year: "2024",
-    href: repo("BudgetBoss"),
+    title: "Vortek Boost",
+    category: "Landing page",
+    tags: ["React", "TypeScript", "Three.js"],
+    description:
+      "Landing page da Vortek Boost, que otimiza PCs e faz sites, softwares sob medida e identidade visual. Na abertura, o símbolo da marca é montado em 3D, e cada serviço tem uma demonstração interativa.",
+    year: "2026",
+    href: "https://vortekboost.pages.dev/",
+    url: "https://vortekboost.pages.dev/",
+    image: vortekDesktop,
+    mobileImage: vortekMobile,
   },
 ];

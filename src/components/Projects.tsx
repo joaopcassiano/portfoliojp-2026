@@ -13,7 +13,27 @@ function Mockup({ project }: { project: Project }) {
   return (
     <div className="glass relative h-full min-h-[220px] overflow-hidden rounded-[20px]">
       {project.image ? (
-        <img src={project.image} alt={`Tela do projeto ${project.title}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover object-top" />
+        <div className="absolute inset-3 flex flex-col overflow-hidden rounded-[14px] bg-graphite md:inset-5">
+          {/* Barra do navegador */}
+          <div aria-hidden="true" className="flex h-8 shrink-0 items-center gap-3 border-b border-bone/10 px-3 md:h-9">
+            <span className="flex gap-1.5">
+              <span className="size-2 rounded-full bg-bone/20" />
+              <span className="size-2 rounded-full bg-bone/20" />
+              <span className="size-2 rounded-full bg-bone/20" />
+            </span>
+            {project.url && (
+              <span className="truncate rounded-full bg-bone/[0.06] px-3 py-0.5 text-[11px] text-mute">
+                {project.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+              </span>
+            )}
+          </div>
+          <img
+            src={project.image}
+            alt={`Página inicial do ${project.title} no computador`}
+            loading="lazy"
+            className="min-h-0 w-full flex-1 object-cover object-left-top"
+          />
+        </div>
       ) : (
         <div className="absolute inset-0 grid place-items-center">
           <div aria-hidden="true" className="absolute inset-0 [background:radial-gradient(60%_80%_at_70%_30%,rgb(255_90_44/0.16),transparent_70%)]" />
@@ -23,6 +43,21 @@ function Mockup({ project }: { project: Project }) {
             <span className="size-1.5 rounded-full bg-ember" />
             Print em breve
           </p>
+        </div>
+      )}
+
+      {/* Celular por cima do print desktop */}
+      {project.mobileImage && (
+        <div
+          data-project-phone
+          className="absolute right-[6%] bottom-[7%] w-[clamp(96px,19%,210px)] rounded-[26px] bg-black p-[5px] shadow-[0_30px_60px_-20px_rgb(0_0_0/0.8)] ring-1 ring-bone/15 transition-transform duration-700 ease-out-expo hover:-translate-y-2 md:rounded-[32px] md:p-[7px]"
+        >
+          <img
+            src={project.mobileImage}
+            alt={`Tela inicial do app ${project.title} no celular`}
+            loading="lazy"
+            className="aspect-[739/1600] w-full rounded-[21px] object-cover md:rounded-[26px]"
+          />
         </div>
       )}
     </div>
@@ -138,7 +173,7 @@ export default function Projects() {
                     href={p.href}
                     target="_blank"
                     rel="noreferrer"
-                    aria-label={`Abrir ${p.title} no GitHub`}
+                    aria-label={`Abrir ${p.title}`}
                     className="group grid size-11 shrink-0 place-items-center rounded-full bg-bone text-ink transition-colors duration-300 hover:bg-ember"
                   >
                     <ArrowIcon className="size-4 transition-transform duration-500 ease-out-expo group-hover:rotate-45" />
