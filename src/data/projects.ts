@@ -34,7 +34,7 @@ export const projects: Project[] = [
     tags: [],
     stack: [
       { label: "Site", items: ["HTML", "CSS", "JavaScript"] },
-      { label: "App", items: ["React Native", "Expo"] },
+      { label: "App", items: ["React Native", "Expo", "JavaScript", "Firebase"] },
     ],
     description:
       "Landing page do Cuidado+, um app que ajuda familiares e cuidadores a acompanhar a rotina de idosos. A página apresenta os recursos do app, como agenda de consultas, controle de medicamentos, lembretes, relatórios e um assistente com IA, e mostra o que ele tem de diferente: letras grandes e navegação simples, pensadas para quem é cuidado.",
