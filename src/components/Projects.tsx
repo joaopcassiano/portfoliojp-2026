@@ -174,7 +174,7 @@ export default function Projects() {
   );
 
   return (
-    <section id="projetos" ref={root} aria-labelledby="projetos-titulo" className="relative pt-8 md:pt-12">
+    <section id="projetos" ref={root} aria-labelledby="projetos-titulo" className="relative overflow-x-clip pt-8 md:pt-12">
       {/* ── Cabeçalho ── */}
       <div data-projects-head className="relative mx-5 flex items-end justify-between pb-5 md:mx-10 lg:mx-14">
         <span data-projects-line aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px origin-left bg-bone/10" />

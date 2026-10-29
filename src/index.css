@@ -37,6 +37,13 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Elementos que entram animados pelas laterais não podem gerar rolagem horizontal.
+     "clip" (e não "hidden") não cria contêiner de rolagem, então não atrapalha os pins do GSAP. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   body {
     background: var(--color-ink);
     color: var(--color-bone);
