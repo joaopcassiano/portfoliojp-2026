@@ -10,7 +10,7 @@ import hero1672Avif from "../assets/hero-1672.avif";
 import hero1672Webp from "../assets/hero-1672.webp";
 
 const GITHUB_USER = "joaopcassiano";
-const REPOS_FALLBACK = 36;
+const REPOS_FALLBACK = "39";
 
 /** Número de repositórios públicos, lido do GitHub (com valor de reserva se a API falhar). */
 function useRepoCount() {

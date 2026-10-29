@@ -3,6 +3,7 @@ import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "./lib/gsap";
 import Hero from "./components/Hero";
 import About from "./components/About";
+import Projects from "./components/Projects";
 import { scroller } from "./lib/lenis";
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
     <main>
       <Hero />
       <About />
+      <Projects />
     </main>
   );
 }
