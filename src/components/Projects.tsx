@@ -1,15 +1,24 @@
-import { useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { gsap, useGSAP } from "../lib/gsap";
 import { revealOnScroll } from "../lib/scrollFx";
 import { useFontsReady } from "../hooks/useFontsReady";
 import { projects, type Project } from "../data/projects";
 import { ArrowIcon } from "./Navbar";
 import Magnetic from "./Magnetic";
+import VideoModal from "./VideoModal";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+function PlayIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
+      <path d="M5 3.5v9l7.5-4.5z" fill="currentColor" />
+    </svg>
+  );
+}
+
 /** Moldura do print. Sem imagem, mostra um espaço reservado com o nome do projeto. */
-function Mockup({ project }: { project: Project }) {
+function Mockup({ project, onPlay }: { project: Project; onPlay: () => void }) {
   return (
     <div className="glass relative h-full min-h-[220px] overflow-hidden rounded-[20px]">
       {project.image ? (
@@ -46,6 +55,32 @@ function Mockup({ project }: { project: Project }) {
         </div>
       )}
 
+      {/* Miniatura do vídeo de apresentação, no canto oposto ao celular */}
+      {project.video && (
+        <button
+          type="button"
+          onClick={onPlay}
+          aria-label={`Assistir ao vídeo de apresentação do ${project.title}`}
+          className="group absolute bottom-[7%] left-[6%] w-[clamp(150px,30%,320px)] overflow-hidden rounded-2xl bg-black text-left shadow-[0_30px_60px_-20px_rgb(0_0_0/0.8)] ring-1 ring-bone/15 transition-transform duration-700 ease-out-expo hover:-translate-y-1"
+        >
+          <img
+            src={project.video.poster}
+            alt=""
+            loading="lazy"
+            className="aspect-video w-full object-cover opacity-80 transition-[opacity,transform] duration-700 ease-out-expo group-hover:scale-105 group-hover:opacity-100"
+          />
+          <span className="absolute inset-0 grid place-items-center">
+            <span className="grid size-11 place-items-center rounded-full bg-ember text-ink shadow-[0_0_0_8px_rgb(255_90_44/0.18)] transition-transform duration-500 ease-out-expo group-hover:scale-110 md:size-14">
+              <PlayIcon className="ml-0.5 size-4 md:size-5" />
+            </span>
+          </span>
+          <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-black/80 to-transparent px-3 pt-6 pb-2 text-[11px] text-bone/90 md:text-xs">
+            <span>Apresentação</span>
+            <span className="tabular-nums">{project.video.duration}</span>
+          </span>
+        </button>
+      )}
+
       {/* Celular por cima do print desktop */}
       {project.mobileImage && (
         <div
@@ -67,6 +102,8 @@ function Mockup({ project }: { project: Project }) {
 export default function Projects() {
   const root = useRef<HTMLElement>(null);
   const fontsReady = useFontsReady();
+  const [playing, setPlaying] = useState<Project | null>(null);
+  const closeVideo = useCallback(() => setPlaying(null), []);
 
   useGSAP(
     () => {
@@ -147,9 +184,24 @@ export default function Projects() {
               <h3 data-project-text className="heading text-[clamp(32px,3.6vw,56px)]">
                 {p.title}
               </h3>
-              <p data-project-text className="mt-4 max-w-[340px] text-[15px] leading-relaxed text-bone/70">
+              <p data-project-text className="mt-4 max-w-[360px] text-[15px] leading-relaxed text-bone/70">
                 {p.description}
               </p>
+              {p.video && (
+                <div data-project-text className="mt-6 hidden lg:block">
+                  <button
+                    type="button"
+                    onClick={() => setPlaying(p)}
+                    className="group flex items-center gap-3 rounded-full border border-bone/15 py-1.5 pr-5 pl-1.5 text-sm text-bone transition-colors duration-300 hover:border-ember/60"
+                  >
+                    <span className="grid size-9 place-items-center rounded-full bg-ember text-ink transition-transform duration-500 ease-out-expo group-hover:scale-110">
+                      <PlayIcon className="ml-0.5 size-3.5" />
+                    </span>
+                    Assistir apresentação
+                    <span className="text-mute tabular-nums">{p.video.duration}</span>
+                  </button>
+                </div>
+              )}
               <div data-project-text className="mt-auto hidden items-center justify-between pt-8 lg:flex">
                 <span className="eyebrow text-mute">{p.category}</span>
                 <span className="eyebrow text-mute tabular-nums">
@@ -181,12 +233,16 @@ export default function Projects() {
                 </Magnetic>
               </div>
               <div className="min-h-0 flex-1">
-                <Mockup project={p} />
+                <Mockup project={p} onPlay={() => setPlaying(p)} />
               </div>
             </div>
           </article>
         ))}
       </div>
+
+      {playing?.video && (
+        <VideoModal open onClose={closeVideo} src={playing.video.src} poster={playing.video.poster} title={playing.title} />
+      )}
     </section>
   );
 }
