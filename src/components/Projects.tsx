@@ -213,13 +213,31 @@ export default function Projects() {
             {/* Tags + print */}
             <div data-project-media className="flex min-h-0 flex-col gap-4 lg:col-span-8">
               <div className="flex items-center justify-between gap-4">
-                <ul className="flex flex-wrap gap-2">
-                  {[...p.tags, p.year].map((t) => (
-                    <li key={t} className="glass rounded-full px-3.5 py-1.5 text-[13px] text-bone/80">
-                      {t}
-                    </li>
-                  ))}
-                </ul>
+                {p.stack ? (
+                  // Tecnologias agrupadas por parte do projeto (ex.: Site | App)
+                  <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                    {p.stack.map((g, gi) => (
+                      <li key={g.label} className="flex flex-wrap items-center gap-2">
+                        {gi > 0 && <span aria-hidden="true" className="mr-2 hidden h-5 w-px bg-bone/15 sm:block" />}
+                        <span className="eyebrow mr-0.5 text-mute">{g.label}</span>
+                        {g.items.map((t) => (
+                          <span key={t} className="glass rounded-full px-3.5 py-1.5 text-[13px] text-bone/80">
+                            {t}
+                          </span>
+                        ))}
+                      </li>
+                    ))}
+                    <li className="glass rounded-full px-3.5 py-1.5 text-[13px] text-bone/80">{p.year}</li>
+                  </ul>
+                ) : (
+                  <ul className="flex flex-wrap gap-2">
+                    {[...p.tags, p.year].map((t) => (
+                      <li key={t} className="glass rounded-full px-3.5 py-1.5 text-[13px] text-bone/80">
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <Magnetic strength={0.3}>
                   <a
                     href={p.href}

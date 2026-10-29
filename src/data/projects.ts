@@ -4,11 +4,15 @@ import cuidadoApp from "../assets/projects/cuidado-app.webp";
 import vortekDesktop from "../assets/projects/vortek-desktop.webp";
 import vortekMobile from "../assets/projects/vortek-mobile.webp";
 import vortekPoster from "../assets/projects/vortek-video-poster.webp";
+import cuidadoPoster from "../assets/projects/cuidado-video-poster.webp";
 
 export type Project = {
   title: string;
   category: string;
+  /** Tecnologias usadas. Use `stack` em vez disso quando o projeto tem partes diferentes (ex.: site e app). */
   tags: string[];
+  /** Tecnologias separadas por parte do projeto, exibidas em grupos com rótulo. */
+  stack?: { label: string; items: string[] }[];
   description: string;
   year: string;
   /** Para onde o botão de seta leva (site publicado ou repositório). */
@@ -27,7 +31,11 @@ export const projects: Project[] = [
   {
     title: "Cuidado+",
     category: "Landing page e app",
-    tags: ["HTML", "CSS", "JavaScript"],
+    tags: [],
+    stack: [
+      { label: "Site", items: ["HTML", "CSS", "JavaScript"] },
+      { label: "App", items: ["React Native", "Expo"] },
+    ],
     description:
       "Landing page do Cuidado+, um app que ajuda familiares e cuidadores a acompanhar a rotina de idosos. A página apresenta os recursos do app, como agenda de consultas, controle de medicamentos, lembretes, relatórios e um assistente com IA, e mostra o que ele tem de diferente: letras grandes e navegação simples, pensadas para quem é cuidado.",
     year: "2026",
@@ -35,6 +43,7 @@ export const projects: Project[] = [
     url: "https://joaopcassiano.github.io/cuidado-mais-web/",
     image: cuidadoDesktop,
     mobileImage: cuidadoApp,
+    video: { src: `${import.meta.env.BASE_URL}videos/cuidado-lancamento.mp4`, poster: cuidadoPoster, duration: "0:25" },
   },
   {
     title: "Vortek Boost",
