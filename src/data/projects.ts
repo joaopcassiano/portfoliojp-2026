@@ -9,10 +9,8 @@ import cuidadoPoster from "../assets/projects/cuidado-video-poster.webp";
 export type Project = {
   title: string;
   category: string;
-  /** Tecnologias usadas. Use `stack` em vez disso quando o projeto tem partes diferentes (ex.: site e app). */
-  tags: string[];
-  /** Tecnologias separadas por parte do projeto, exibidas em grupos com rótulo. */
-  stack?: { label: string; items: string[] }[];
+  /** Tecnologias separadas por parte do projeto (ex.: Site e App), cada parte num bloco próprio. */
+  stack: { label: "Site" | "App"; items: string[] }[];
   description: string;
   year: string;
   /** Para onde o botão de seta leva (site publicado ou repositório). */
@@ -31,7 +29,6 @@ export const projects: Project[] = [
   {
     title: "Cuidado+",
     category: "Landing page e app",
-    tags: [],
     stack: [
       { label: "Site", items: ["HTML", "CSS", "JavaScript"] },
       { label: "App", items: ["React Native", "Expo", "JavaScript", "Firebase"] },
@@ -48,7 +45,7 @@ export const projects: Project[] = [
   {
     title: "Vortek Boost",
     category: "Landing page",
-    tags: ["React", "TypeScript", "Three.js"],
+    stack: [{ label: "Site", items: ["React", "TypeScript", "Three.js"] }],
     description:
       "Landing page da Vortek Boost, que otimiza PCs e cria sites, softwares sob medida e identidades visuais. Na abertura, o símbolo da marca é montado em 3D conforme a pessoa rola a página. Cada serviço tem uma demonstração interativa, como o boost de desempenho do PC, e o formulário monta o pedido de orçamento, que chega por e-mail.",
     year: "2026",

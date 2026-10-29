@@ -9,6 +9,25 @@ import VideoModal from "./VideoModal";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+/** Ícone de cada parte do projeto: monitor para o site, celular para o app. */
+function PartIcon({ part }: { part: Project["stack"][number]["label"] }) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="size-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      {part === "Site" ? (
+        <>
+          <rect x="1.5" y="2.5" width="13" height="8.5" rx="1.5" />
+          <path d="M5.5 14h5M8 11v3" />
+        </>
+      ) : (
+        <>
+          <rect x="4" y="1.5" width="8" height="13" rx="2" />
+          <path d="M7 12.5h2" />
+        </>
+      )}
+    </svg>
+  );
+}
+
 function PlayIcon({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true" className={className}>
@@ -212,43 +231,42 @@ export default function Projects() {
 
             {/* Tags + print */}
             <div data-project-media className="flex min-h-0 flex-col gap-4 lg:col-span-8">
-              <div className="flex items-center justify-between gap-4">
-                {p.stack ? (
-                  // Tecnologias agrupadas por parte do projeto (ex.: Site | App)
-                  <ul className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                    {p.stack.map((g, gi) => (
-                      <li key={g.label} className="flex flex-wrap items-center gap-2">
-                        {gi > 0 && <span aria-hidden="true" className="mr-2 hidden h-5 w-px bg-bone/15 sm:block" />}
-                        <span className="eyebrow mr-0.5 text-mute">{g.label}</span>
-                        {g.items.map((t) => (
-                          <span key={t} className="glass rounded-full px-3.5 py-1.5 text-[13px] text-bone/80">
-                            {t}
-                          </span>
-                        ))}
-                      </li>
-                    ))}
-                    <li className="glass rounded-full px-3.5 py-1.5 text-[13px] text-bone/80">{p.year}</li>
-                  </ul>
-                ) : (
-                  <ul className="flex flex-wrap gap-2">
-                    {[...p.tags, p.year].map((t) => (
-                      <li key={t} className="glass rounded-full px-3.5 py-1.5 text-[13px] text-bone/80">
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <Magnetic strength={0.3}>
-                  <a
-                    href={p.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`Abrir ${p.title}`}
-                    className="group grid size-11 shrink-0 place-items-center rounded-full bg-bone text-ink transition-colors duration-300 hover:bg-ember"
-                  >
-                    <ArrowIcon className="size-4 transition-transform duration-500 ease-out-expo group-hover:rotate-45" />
-                  </a>
-                </Magnetic>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                {/* Tecnologias: um bloco por parte do projeto, com ícone e rótulo */}
+                <ul className="flex min-w-0 flex-wrap gap-2.5">
+                  {p.stack.map((g) => (
+                    <li key={g.label} className="glass flex min-w-0 items-center gap-3 rounded-2xl py-2 pr-4 pl-2">
+                      <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-bone/[0.07] text-bone/80">
+                        <PartIcon part={g.label} />
+                      </span>
+                      <span className="flex flex-col leading-tight">
+                        <span className="text-[11px] text-mute">{g.label}</span>
+                        <span className="flex flex-wrap text-[13px] text-bone/90">
+                          {g.items.map((t, ti) => (
+                            <span key={t} className="whitespace-nowrap">
+                              {ti > 0 && <span aria-hidden="true" className="mx-1.5 text-mute/60">·</span>}
+                              {t}
+                            </span>
+                          ))}
+                        </span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex shrink-0 items-center justify-between gap-4 sm:justify-end">
+                  <span className="text-sm text-mute tabular-nums">{p.year}</span>
+                  <Magnetic strength={0.3}>
+                    <a
+                      href={p.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Abrir ${p.title}`}
+                      className="group grid size-11 shrink-0 place-items-center rounded-full bg-bone text-ink transition-colors duration-300 hover:bg-ember"
+                    >
+                      <ArrowIcon className="size-4 transition-transform duration-500 ease-out-expo group-hover:rotate-45" />
+                    </a>
+                  </Magnetic>
+                </div>
               </div>
               <div className="min-h-0 flex-1">
                 <Mockup project={p} onPlay={() => setPlaying(p)} />
