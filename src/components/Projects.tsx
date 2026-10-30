@@ -108,7 +108,7 @@ function Mockup({ project, onPlay }: { project: Project; onPlay: () => void }) {
         >
           <img
             src={project.mobileImage}
-            alt={`Tela inicial do app ${project.title} no celular`}
+            alt={`Página do ${project.title} aberta no celular`}
             loading="lazy"
             className="aspect-[739/1600] w-full rounded-[21px] object-cover md:rounded-[26px]"
           />

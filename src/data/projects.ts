@@ -1,6 +1,6 @@
 // Projetos da seção Projetos.
 import cuidadoDesktop from "../assets/projects/cuidado-desktop.webp";
-import cuidadoApp from "../assets/projects/cuidado-app.webp";
+import cuidadoMobile from "../assets/projects/cuidado-mobile.webp";
 import vortekDesktop from "../assets/projects/vortek-desktop.webp";
 import vortekMobile from "../assets/projects/vortek-mobile.webp";
 import vortekPoster from "../assets/projects/vortek-video-poster.webp";
@@ -34,12 +34,12 @@ export const projects: Project[] = [
       { label: "App", items: ["React Native", "Expo", "JavaScript", "Firebase"] },
     ],
     description:
-      "Landing page do Cuidado+, um app que ajuda familiares e cuidadores a acompanhar a rotina de idosos. A página apresenta os recursos do app, como agenda de consultas, controle de medicamentos, lembretes, relatórios e um assistente com IA, e mostra o que ele tem de diferente: letras grandes e navegação simples, pensadas para quem é cuidado.",
+      "Landing page do Cuidado+, um app em que a família acompanha os remédios, as consultas e as atividades de um idoso: quando alguém confirma um remédio, todos veem na hora. A página conta um dia comum com o app, da manhã à noite, usando as telas reais, e mostra o assistente que responde o que ainda falta e gera um PDF com o histórico para o médico.",
     year: "2026",
     href: "https://joaopcassiano.github.io/cuidado-mais-web/",
     url: "https://joaopcassiano.github.io/cuidado-mais-web/",
     image: cuidadoDesktop,
-    mobileImage: cuidadoApp,
+    mobileImage: cuidadoMobile,
     video: { src: `${import.meta.env.BASE_URL}videos/cuidado-lancamento.mp4`, poster: cuidadoPoster, duration: "0:25" },
   },
   {
