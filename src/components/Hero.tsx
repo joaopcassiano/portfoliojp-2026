@@ -350,7 +350,7 @@ export default function Hero() {
             {services.map((s) => (
               <li key={s.n} data-service>
                 <a
-                  href="#servicos"
+                  href="#processo"
                   className="glass group flex items-center gap-3 rounded-2xl p-2 pr-4 transition-colors duration-300 hover:border-bone/25 hover:bg-carbon/70"
                 >
                   <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-bone/[0.06] text-[13px] font-medium text-mute tabular-nums transition-colors duration-300 group-hover:bg-ember group-hover:text-ink">

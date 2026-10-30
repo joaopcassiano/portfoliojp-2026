@@ -3,7 +3,7 @@ import { gsap, SplitText, useGSAP } from "../lib/gsap";
 import { revealOnScroll } from "../lib/scrollFx";
 import Magnetic from "./Magnetic";
 import { ArrowIcon } from "./Navbar";
-import Stack from "./Stack";
+import Trajectory from "./Trajectory";
 import hero900Avif from "../assets/hero-900.avif";
 import hero900Webp from "../assets/hero-900.webp";
 import hero1672Avif from "../assets/hero-1672.avif";
@@ -242,7 +242,7 @@ export default function About() {
         </div>
       </div>
 
-      <Stack />
+      <Trajectory />
     </section>
   );
 }
