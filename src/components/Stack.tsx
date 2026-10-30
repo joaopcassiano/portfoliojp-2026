@@ -75,9 +75,7 @@ export default function Stack() {
         const refreshPriority = -1;
 
         const opts = { refreshPriority };
-        revealOnScroll("[data-stack-head] h3", "[data-stack-head]", { x: -120, autoAlpha: 0 }, opts);
-        revealOnScroll("[data-stack-count]", "[data-stack-head]", { x: 120, autoAlpha: 0 }, opts);
-        revealOnScroll("[data-stack-line]", "[data-stack-head]", { scaleX: 0 }, { ...opts, duration: 1.6 });
+        revealOnScroll("[data-stack-head] > *", "[data-stack-head]", { x: -80, autoAlpha: 0 }, { ...opts, stagger: 0.1 });
 
         // Cada cartão chega de um lado: esquerda, de baixo e direita
         const cards = gsap.utils.toArray<HTMLElement>("[data-stack-card]");
@@ -125,14 +123,14 @@ export default function Stack() {
   );
 
   return (
-    <div ref={root} className="mt-24 md:mt-36">
-      <div data-stack-head className="relative flex items-end justify-between pb-5">
-        <span data-stack-line aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px origin-left bg-bone/10" />
-        <h3 className="eyebrow text-mute">Linguagens e ferramentas</h3>
-        <span data-stack-count className="eyebrow text-mute tabular-nums">{total}</span>
+    <div ref={root} className="mt-16 md:mt-24">
+      {/* Subtítulo dentro do Processo (não é uma seção nova, por isso sem número nem linha) */}
+      <div data-stack-head className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+        <h3 className="heading text-3xl md:text-4xl">Com o que eu trabalho</h3>
+        <span className="text-sm text-mute tabular-nums">{total} linguagens e ferramentas</span>
       </div>
 
-      <div data-stack-grid className="group/grid mt-6 grid gap-3 md:grid-cols-3">
+      <div data-stack-grid className="group/grid mt-8 grid gap-3 md:grid-cols-3">
         {groups.map((g) => (
           <div key={g.title}>
             <section
