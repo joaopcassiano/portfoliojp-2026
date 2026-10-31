@@ -275,9 +275,9 @@ export default function Hero() {
         </div>
 
         {/* ── Conteúdo principal ── */}
-        <div className="relative z-10 flex h-full flex-col justify-end px-5 pt-28 pb-24 md:justify-center md:px-10 md:pb-28 lg:px-14">
+        <div className="relative z-10 flex h-full flex-col justify-end px-5 pt-28 pb-[84px] md:justify-center md:px-10 md:pb-28 lg:px-14">
           <div className="max-w-[640px]">
-            <div data-eyebrow data-reveal className="eyebrow mb-6 flex items-center gap-3 text-mute">
+            <div data-eyebrow data-reveal className="eyebrow mb-4 hidden md:mb-6 md:flex items-center gap-3 text-mute">
               <span className="size-1.5 rounded-full bg-ember" />
               <span className="whitespace-nowrap">Design Developer</span>
               <span className="h-px w-10 bg-bone/20" />
@@ -303,12 +303,12 @@ export default function Hero() {
               </span>
             </h1>
 
-            <p data-intro data-reveal className="mt-8 max-w-[440px] text-base leading-relaxed text-bone/70 md:text-[17px]">
+            <p data-intro data-reveal className="mt-5 max-w-[440px] text-base md:mt-8 leading-relaxed text-bone/70 md:text-[17px]">
               Sou JP Cassiano, design developer. Desenho sites e produtos digitais e também escrevo o código, então o
               layout que você aprova é o mesmo que vai para o ar.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-3 md:mt-9">
               <div data-cta data-reveal>
                 <Magnetic>
                   <a
