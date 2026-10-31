@@ -1,10 +1,13 @@
 import { siGithub, siGmail, siInstagram } from "simple-icons";
 
+// Abre o Gmail com a mensagem já começada: um link mailto: não faz nada em quem não tem app de e-mail configurado.
+export const GMAIL_COMPOSE = "https://mail.google.com/mail/?view=cm&fs=1&to=dev.jpcassiano@gmail.com";
+
 export const socials = [
   { label: "Instagram", href: "https://www.instagram.com/_9joaopedro/", path: siInstagram.path },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/jo%C3%A3o-pedro-pereira-cassiano/", path: null },
   { label: "GitHub", href: "https://github.com/joaopcassiano", path: siGithub.path },
-  { label: "E-mail", href: "mailto:dev.jpcassiano@gmail.com", path: siGmail.path },
+  { label: "E-mail", href: GMAIL_COMPOSE, path: siGmail.path },
 ];
 
 // O LinkedIn não está no simple-icons, então o ícone é desenhado à mão.

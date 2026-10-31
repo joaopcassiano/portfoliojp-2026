@@ -3,7 +3,7 @@ import { gsap, SplitText, useGSAP } from "../lib/gsap";
 import { revealOnScroll } from "../lib/scrollFx";
 import { useFontsReady } from "../hooks/useFontsReady";
 import { useLocalTime } from "../hooks/useLocalTime";
-import { socials } from "./SocialLinks";
+import { GMAIL_COMPOSE, socials } from "./SocialLinks";
 import { ArrowIcon } from "./Navbar";
 import Magnetic from "./Magnetic";
 
@@ -126,11 +126,11 @@ export default function Contact() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     } catch {
-      window.location.href = `mailto:${EMAIL}`;
+      window.open(GMAIL_COMPOSE, "_blank", "noreferrer");
     }
   };
 
-  const channels = socials.filter((s) => !s.href.startsWith("mailto"));
+  const channels = socials.filter((s) => s.label !== "E-mail");
 
   return (
     <section
@@ -171,7 +171,7 @@ export default function Contact() {
 
           <ul data-contact-channels className="mt-10 divide-y divide-bone/10 border-y border-bone/10 lg:mt-auto">
             <li data-contact-channel className="flex items-center justify-between gap-4 py-4">
-              <a href={`mailto:${EMAIL}`} className="group min-w-0">
+              <a href={GMAIL_COMPOSE} target="_blank" rel="noreferrer" className="group min-w-0">
                 <span className="block text-[13px] text-mute">E-mail</span>
                 <span className="block truncate text-lg text-bone transition-colors group-hover:text-ember md:text-xl">{EMAIL}</span>
               </a>
