@@ -149,18 +149,21 @@ export default function Hero() {
           const items = gsap.utils.toArray<HTMLElement>("[data-word]");
           const hold = 2.4;
           gsap.set(items.slice(1), { yPercent: 110 });
-          const rotate = gsap.timeline({ repeat: -1 });
-          items.forEach((el, i) => {
-            const next = items[(i + 1) % items.length];
-            rotate
-              .to(el, { yPercent: -110, duration: 0.9, ease: "expo.inOut" }, i * hold + 1.5)
-              .fromTo(next, { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.inOut" }, "<");
-          });
-          // Pausa quando a hero sai da tela e continua de onde parou ao voltar
+          // Um passo por vez (em vez de uma timeline com todas as trocas), para a linha nunca ficar vazia ao recomeçar
+          let current = 0;
+          const step = () => {
+            const next = (current + 1) % items.length;
+            gsap.to(items[current], { yPercent: -110, duration: 0.9, ease: "expo.inOut" });
+            gsap.fromTo(items[next], { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.inOut" });
+            current = next;
+          };
+          const rotate = gsap.timeline({ repeat: -1 }).call(step, undefined, hold);
+          // Pausa quando a hero sai da tela e continua de onde parou ao voltar.
+          // A hero fica fixa durante a animação de scroll, então o fim conta o trecho fixo + a altura dela.
           ScrollTrigger.create({
             trigger: root.current,
             start: "top bottom",
-            end: "bottom top",
+            end: () => tl.scrollTrigger!.end + root.current!.offsetHeight,
             onToggle: (self) => (self.isActive ? rotate.resume() : rotate.pause()),
           });
 
