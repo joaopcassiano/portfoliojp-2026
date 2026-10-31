@@ -71,16 +71,19 @@ export default function Hero() {
           motion: "(prefers-reduced-motion: no-preference)",
           fine: "(hover: hover) and (pointer: fine)",
           desktop: "(min-width: 1024px)",
+          phone: "(max-width: 767px)",
         },
         (ctx) => {
-          const { motion, fine, desktop } = ctx.conditions as { motion: boolean; fine: boolean; desktop: boolean };
+          const { motion, fine, desktop, phone } = ctx.conditions as { motion: boolean; fine: boolean; desktop: boolean; phone: boolean };
+          // Enquadramento final da foto. No celular o rosto sobe para ficar acima do texto, sem ficar atrás dele.
+          const stageEnd = desktop ? { scale: 1.55, x: "9vw", y: 0 } : phone ? { scale: 0.95, x: 0, y: "-26vh" } : { scale: 1.2, x: 0, y: "-15vh" };
 
           // Sem animação: mostra o estado final direto, com o rosto já colorido.
           if (!motion) {
             gsap.set("[data-reveal]", { autoAlpha: 1 });
             gsap.set("[data-cue]", { autoAlpha: 0 });
             gsap.set("[data-shade]", { autoAlpha: 1 });
-            gsap.set("[data-stage]", { scale: desktop ? 1.55 : 1.2, x: desktop ? "9vw" : 0, y: desktop ? 0 : "-15vh" });
+            gsap.set("[data-stage]", stageEnd);
             gsap.set("[data-photo='color']", { "--s": 1 });
             return;
           }
@@ -124,7 +127,7 @@ export default function Hero() {
           tl.to("[data-cue]", { autoAlpha: 0, y: 24, duration: 0.6, ease: "power1.in" }, 0)
             .to(
               "[data-stage]",
-              { scale: desktop ? 1.55 : 1.2, x: desktop ? "9vw" : 0, y: desktop ? 0 : "-15vh", duration: 4, ease: "power2.inOut" },
+              { ...stageEnd, duration: 4, ease: "power2.inOut" },
               0,
             )
             .to("[data-photo='color']", { "--s": 1, duration: 3, ease: "power1.inOut" }, 1)
