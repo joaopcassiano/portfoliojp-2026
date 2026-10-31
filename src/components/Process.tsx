@@ -1,11 +1,12 @@
-import { useRef } from "react";
-import { gsap, useGSAP } from "../lib/gsap";
+import { useEffect, useRef, useState } from "react";
+import { gsap, ScrollTrigger, useGSAP } from "../lib/gsap";
 import { revealOnScroll } from "../lib/scrollFx";
 import { useFontsReady } from "../hooks/useFontsReady";
 import { steps, type ProcessStep } from "../data/process";
 import { ArrowIcon } from "./Navbar";
 import Magnetic from "./Magnetic";
 import Stack from "./Stack";
+import { scrollToY } from "../lib/lenis";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -141,9 +142,19 @@ function StepVisual({ kind }: { kind: ProcessStep["visual"] }) {
   }
 }
 
+/** Quanto de rolagem (em % da altura da tela) cada etapa ocupa enquanto a área está presa. */
+const SCROLL_PER_STEP = 60;
+
 export default function Process() {
   const root = useRef<HTMLElement>(null);
+  const visuals = useRef<HTMLDivElement>(null);
+  const bars = useRef<(HTMLSpanElement | null)[]>([]);
+  const pin = useRef<ScrollTrigger | null>(null);
+  const activeRef = useRef(0);
   const fontsReady = useFontsReady();
+
+  const [active, setActive] = useState(0);
+  const [reduced] = useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
   useGSAP(
     () => {
@@ -155,42 +166,94 @@ export default function Process() {
         revealOnScroll("[data-process-line]", "[data-process-head]", { scaleX: 0 }, { duration: 1.6 });
         revealOnScroll("[data-process-title] > *", "[data-process-title]", { y: 60, autoAlpha: 0 }, { stagger: 0.12 });
 
-        // Cada etapa: número da esquerda, texto da direita, visual subindo e montando seus elementos
-        gsap.utils.toArray<HTMLElement>("[data-step]").forEach((step) => {
-          revealOnScroll(step.querySelector("[data-step-rule]"), step, { scaleX: 0 }, { duration: 1.4 });
-          revealOnScroll(step.querySelector("[data-step-num]"), step, { x: -80, autoAlpha: 0 });
-          revealOnScroll(step.querySelectorAll("[data-step-text]"), step, { x: 80, autoAlpha: 0 }, { stagger: 0.1, delay: 0.1 });
-          revealOnScroll(
-            step.querySelector("[data-step-visual]"),
-            step,
-            { y: 80, rotationX: -20, autoAlpha: 0, transformOrigin: "50% 100%" },
-            { delay: 0.15, duration: 1.4 },
-          );
-          revealOnScroll(step.querySelectorAll("[data-vis]"), step, { y: 16, autoAlpha: 0 }, { stagger: 0.12, delay: 0.5, duration: 0.9 });
+        // Lista de etapas entra da esquerda; o quadro do visual sobe
+        revealOnScroll("[data-step]", "[data-process-steps]", { x: -80, autoAlpha: 0 }, { stagger: 0.08 });
+        revealOnScroll(
+          "[data-step-card]",
+          "[data-process-steps]",
+          { y: 80, rotationX: -15, autoAlpha: 0, transformOrigin: "50% 100%" },
+          { delay: 0.15, duration: 1.4 },
+        );
+
+        // A área das etapas fica presa enquanto a pessoa rola; cada trecho da rolagem abre uma etapa
+        // e a barrinha da etapa aberta mostra quanto falta para a próxima.
+        pin.current = ScrollTrigger.create({
+          trigger: "[data-process-steps]",
+          start: () => (window.innerWidth < 1024 ? "top top+=24" : "center center"),
+          end: () => `+=${(steps.length * SCROLL_PER_STEP * window.innerHeight) / 100}`,
+          pin: true,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const pos = self.progress * steps.length;
+            const index = Math.min(steps.length - 1, Math.floor(pos));
+            if (index !== activeRef.current) {
+              activeRef.current = index;
+              setActive(index);
+            }
+            bars.current.forEach((bar, i) => {
+              if (bar) gsap.set(bar, { scaleX: i === index ? Math.min(1, pos - index) : i < index ? 1 : 0 });
+            });
+          },
         });
 
-        // Os cartões do visual de motion sobem em sequência sem parar, como uma animação de verdade
+        // Os cartões do visual de motion sobem em sequência sem parar, como uma animação de verdade.
+        // Só rodam enquanto estão na tela.
         gsap.to("[data-motion-card]", {
           y: -18,
           backgroundColor: "rgb(255 90 44 / 0.85)",
           duration: 0.5,
           ease: "power2.out",
           stagger: { each: 0.12, repeat: -1, yoyo: true, repeatDelay: 0.6 },
+          scrollTrigger: { trigger: "[data-step-card]", start: "top bottom", end: "bottom top", toggleActions: "play pause resume pause" },
         });
 
         revealOnScroll("[data-process-end] > *", "[data-process-end]", { y: 50, autoAlpha: 0 }, { stagger: 0.12 });
+
+        return () => {
+          pin.current = null;
+        };
       });
       return () => mm.revert();
     },
     { scope: root, dependencies: [fontsReady] },
   );
 
+  // Clique numa etapa: com a área presa, rola até o trecho dela; sem animação, só abre a etapa
+  const goTo = (i: number) => {
+    const st = pin.current;
+    if (!st) {
+      activeRef.current = i;
+      setActive(i);
+      return;
+    }
+    scrollToY(st.start + ((i + 0.05) / steps.length) * (st.end - st.start), 1.2);
+  };
+
+  // Troca do visual: o anterior sai para cima, o novo sobe e monta seus elementos
+  useEffect(() => {
+    const layers = visuals.current?.querySelectorAll<HTMLElement>("[data-visual]");
+    if (!layers) return;
+    layers.forEach((layer, i) => {
+      gsap.killTweensOf(layer);
+      if (i === active) {
+        if (reduced) {
+          gsap.set(layer, { autoAlpha: 1, y: 0 });
+          return;
+        }
+        gsap.fromTo(layer, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "expo.out" });
+        gsap.from(layer.querySelectorAll("[data-vis]"), { y: 14, autoAlpha: 0, stagger: 0.08, delay: 0.15, duration: 0.6, ease: "expo.out" });
+      } else {
+        gsap.to(layer, { autoAlpha: 0, y: -16, duration: reduced ? 0 : 0.35, ease: "power2.in" });
+      }
+    });
+  }, [active, reduced]);
+
   return (
     <section
       id="processo"
       ref={root}
       aria-labelledby="processo-titulo"
-      className="relative overflow-x-clip px-5 pt-28 pb-24 md:px-10 md:pt-40 md:pb-32 lg:px-14"
+      className="relative overflow-x-clip px-5 pt-24 pb-20 md:px-10 md:pt-32 md:pb-28 lg:px-14"
     >
       {/* ── Cabeçalho ── */}
       <div data-process-head className="relative flex items-end justify-between pb-5">
@@ -205,7 +268,7 @@ export default function Process() {
         </span>
       </div>
 
-      <div data-process-title className="mt-12 grid gap-6 md:mt-16 lg:grid-cols-12">
+      <div data-process-title className="mt-10 grid gap-6 md:mt-14 lg:grid-cols-12">
         <h2 id="processo-titulo" className="display text-[clamp(44px,6.4vw,104px)] lg:col-span-7">
           Do layout ao código
         </h2>
@@ -214,42 +277,94 @@ export default function Process() {
         </p>
       </div>
 
-      {/* ── Etapas ── */}
-      <ol className="mt-16 md:mt-24">
-        {steps.map((s, i) => (
-          <li key={s.title} data-step className="relative grid gap-6 py-10 md:py-12 lg:grid-cols-12 lg:gap-8">
-            <span data-step-rule aria-hidden="true" className="absolute inset-x-0 top-0 h-px origin-left bg-bone/10" />
-            <span data-step-num className="display text-5xl text-ember tabular-nums md:text-6xl lg:col-span-2">
-              {pad(i + 1)}
+      {/* ── Etapas: lista compacta + um quadro de visual que troca com a etapa ── */}
+      <div
+        data-process-steps
+        className="mt-10 grid gap-6 md:mt-14 lg:grid-cols-12 lg:gap-12"
+      >
+        <div className="[perspective:1200px] lg:order-2 lg:col-span-7">
+          <div data-step-card className="glass relative h-64 overflow-hidden rounded-[24px] md:h-80 lg:h-full lg:min-h-[400px]">
+            <span className="absolute top-5 left-6 text-sm text-mute tabular-nums">
+              {pad(active + 1)} / {pad(steps.length)}
             </span>
-            <div className="lg:col-span-5">
-              <h3 data-step-text className="heading text-3xl md:text-4xl">
-                {s.title}
-              </h3>
-              <p data-step-text className="mt-4 max-w-[440px] text-base leading-relaxed text-bone/70">
-                {s.text}
-              </p>
-              <p data-step-text className="mt-6 flex items-start gap-3 text-sm">
-                <span className="mt-0.5 shrink-0 rounded-full border border-bone/15 px-2.5 py-0.5 text-[12px] text-mute">
-                  Você recebe
-                </span>
-                <span className="text-bone/90">{s.delivers}</span>
-              </p>
+            <div ref={visuals} className="absolute inset-0">
+              {steps.map((s, i) => (
+                <div
+                  key={s.title}
+                  data-visual
+                  aria-hidden={i !== active}
+                  className={`absolute inset-0 grid place-items-center px-5 ${i === 0 ? "" : "invisible opacity-0"}`}
+                >
+                  <div className="h-56 w-full max-w-[460px]">
+                    <StepVisual kind={s.visual} />
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="[perspective:1200px] lg:col-span-5">
-              <div data-step-visual className="glass h-52 overflow-hidden rounded-[20px] md:h-56">
-                <StepVisual kind={s.visual} />
-              </div>
-            </div>
-          </li>
-        ))}
-      </ol>
+          </div>
+        </div>
+
+        <ol className="divide-y divide-bone/10 border-y border-bone/10 lg:order-1 lg:col-span-5">
+          {steps.map((s, i) => {
+            const open = i === active;
+            return (
+              <li key={s.title} data-step>
+                <button
+                  type="button"
+                  onClick={() => goTo(i)}
+                  aria-expanded={open}
+                  aria-controls={`etapa-${i}`}
+                  className="group flex w-full items-baseline gap-5 py-4 text-left md:py-5"
+                >
+                  <span
+                    className={`w-8 shrink-0 text-xl tabular-nums transition-colors duration-500 md:w-10 md:text-2xl ${open ? "text-ember" : "text-mute group-hover:text-bone/70"}`}
+                  >
+                    {pad(i + 1)}
+                  </span>
+                  <h3
+                    className={`heading text-2xl transition-colors duration-500 md:text-3xl ${open ? "text-bone" : "text-bone/45 group-hover:text-bone/80"}`}
+                  >
+                    {s.title}
+                  </h3>
+                </button>
+                {/* Conteúdo da etapa: abre só na etapa ativa */}
+                <div
+                  id={`etapa-${i}`}
+                  className={`grid transition-[grid-template-rows] duration-500 ease-out-expo ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="pb-5 pl-[3.25rem] md:pl-[3.75rem]">
+                      <p className="max-w-[440px] text-[15px] leading-relaxed text-bone/70">{s.text}</p>
+                      <p className="mt-4 flex items-start gap-3 text-sm">
+                        <span className="mt-0.5 shrink-0 rounded-full border border-bone/15 px-2.5 py-0.5 text-[12px] text-mute">
+                          Você recebe
+                        </span>
+                        <span className="text-bone/90">{s.delivers}</span>
+                      </p>
+                      {!reduced && (
+                        <span aria-hidden="true" className="mt-5 block h-px w-full overflow-hidden bg-bone/10">
+                          <span
+                            ref={(el) => {
+                              bars.current[i] = el;
+                            }}
+                            className="block h-full origin-left scale-x-0 bg-ember"
+                          />
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
 
       {/* ── Linguagens e ferramentas (o componente já traz o próprio espaçamento) ── */}
       <Stack />
 
       {/* ── Fechamento ── */}
-      <div data-process-end className="mt-24 flex flex-col items-start gap-8 md:mt-36 md:flex-row md:items-end md:justify-between">
+      <div data-process-end className="mt-20 flex flex-col items-start gap-8 md:mt-28 md:flex-row md:items-end md:justify-between">
         <p className="display max-w-[760px] text-[clamp(36px,4.6vw,72px)]">
           Tem um projeto em mente? Me conta o que você precisa<span className="text-ember">.</span>
         </p>

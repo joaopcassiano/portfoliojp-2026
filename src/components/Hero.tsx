@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { gsap, SplitText, useGSAP } from "../lib/gsap";
+import { gsap, ScrollTrigger, SplitText, useGSAP } from "../lib/gsap";
 import Magnetic from "./Magnetic";
 import Navbar, { ArrowIcon } from "./Navbar";
 import Logo from "./Logo";
@@ -167,6 +167,13 @@ export default function Hero() {
               .to(el, { yPercent: -110, duration: 0.9, ease: "expo.inOut" }, i * hold + 1.5)
               .fromTo(next, { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.inOut" }, "<");
           });
+          // Pausa quando a hero sai da tela e continua de onde parou ao voltar
+          ScrollTrigger.create({
+            trigger: root.current,
+            start: "top bottom",
+            end: "bottom top",
+            onToggle: (self) => (self.isActive ? rotate.resume() : rotate.pause()),
+          });
 
           // ── Cursor: paralaxe da foto e luz que segue o mouse ─────
           if (fine) {
@@ -203,10 +210,10 @@ export default function Hero() {
     <section id="inicio" ref={root} className="relative h-svh min-h-[640px] p-2 md:p-3">
       <div data-frame className="relative h-full overflow-hidden rounded-[var(--frame-radius)] bg-ink [container-type:size]">
         {/* ── Fundo: foto P&B, cópia colorida revelada no rosto, luz, sombras e granulação ── */}
-        <div data-photo-wrap className="absolute inset-0">
+        <div data-photo-wrap className="absolute inset-0 will-change-transform">
           {/* O wrapper centraliza com translate do CSS; o GSAP só mexe no data-stage de dentro */}
           <div className="absolute top-1/2 left-1/2 aspect-[1672/941] w-[max(106cqw,calc(106cqh*1672/941))] -translate-x-1/2 -translate-y-1/2">
-            <div data-stage className="absolute inset-0" style={{ transformOrigin: `${FACE.x} ${FACE.y}` }}>
+            <div data-stage className="absolute inset-0 will-change-transform" style={{ transformOrigin: `${FACE.x} ${FACE.y}` }}>
               <Photo />
               <Photo color />
             </div>
@@ -216,7 +223,7 @@ export default function Hero() {
         <div
           data-light
           aria-hidden="true"
-          className="pointer-events-none absolute top-0 left-0 hidden size-[620px] rounded-full mix-blend-soft-light [background:radial-gradient(circle,rgb(255_138_99/0.55),rgb(255_90_44/0.12)_40%,transparent_68%)] [@media(hover:hover)]:block"
+          className="pointer-events-none absolute top-0 left-0 hidden size-[620px] rounded-full mix-blend-soft-light will-change-transform [background:radial-gradient(circle,rgb(255_138_99/0.55),rgb(255_90_44/0.12)_40%,transparent_68%)] [@media(hover:hover)]:block"
         />
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgb(9_9_10/0.6)_100%)]" />
         <div data-shade aria-hidden="true" className="pointer-events-none invisible absolute inset-0 opacity-0">

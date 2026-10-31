@@ -195,7 +195,7 @@ export default function Projects() {
             key={p.title}
             data-project
             aria-label={p.title}
-            className="absolute inset-0 grid grid-rows-[auto_1fr] gap-6 border-t border-bone/10 bg-ink px-5 pt-8 pb-6 md:px-10 md:pt-10 md:pb-10 lg:grid-cols-12 lg:grid-rows-1 lg:gap-8 lg:px-14"
+            className="absolute inset-0 grid grid-rows-[auto_1fr] gap-6 border-t border-bone/10 bg-ink will-change-transform px-5 pt-8 pb-6 md:px-10 md:pt-10 md:pb-10 lg:grid-cols-12 lg:grid-rows-1 lg:gap-8 lg:px-14"
             style={{ zIndex: i + 1 }}
           >
             {/* Texto */}
