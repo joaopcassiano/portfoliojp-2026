@@ -1,0 +1,229 @@
+<!doctype html>
+<!--
+  Currículo de JP Cassiano. Fonte do PDF em public/curriculo.pdf.
+  Para gerar de novo depois de editar: node brand/curriculo/build_pdf.cjs
+  Uma coluna, títulos padrão e texto real (nada de imagem): é o formato que os sistemas de triagem (ATS) leem melhor.
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Currículo — João Pedro Pereira Cassiano</title>
+    <style>
+      @font-face {
+        font-family: "Instrument Sans";
+        src: url("../../node_modules/@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2") format("woff2");
+        font-weight: 400 700;
+      }
+      @font-face {
+        font-family: "Instrument Sans";
+        src: url("../../node_modules/@fontsource-variable/instrument-sans/files/instrument-sans-latin-ext-wght-normal.woff2") format("woff2");
+        font-weight: 400 700;
+        unicode-range: U+0100-024F, U+1E00-1EFF;
+      }
+      @page {
+        size: A4;
+        margin: 11mm 14mm;
+      }
+      :root {
+        --ink: #16161a;
+        --mute: #5f5c57;
+        --line: #e4e0da;
+        --ember: #e8481b;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Instrument Sans", Arial, sans-serif;
+        color: var(--ink);
+        font-size: 9.1pt;
+        line-height: 1.36;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      header {
+        padding-bottom: 10pt;
+        border-bottom: 1.5pt solid var(--ink);
+      }
+      h1 {
+        font-size: 22pt;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      h1 span {
+        color: var(--ember);
+      }
+      .role {
+        margin-top: 2pt;
+        font-size: 11pt;
+        font-weight: 500;
+      }
+      .contact {
+        margin-top: 6pt;
+        color: var(--mute);
+        font-size: 9pt;
+      }
+      .contact span + span::before {
+        content: "  ·  ";
+        white-space: pre;
+      }
+      section {
+        margin-top: 9pt;
+      }
+      h2 {
+        font-size: 9pt;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ember);
+        padding-bottom: 3pt;
+        margin-bottom: 6pt;
+        border-bottom: 0.75pt solid var(--line);
+      }
+      .item + .item {
+        margin-top: 5.5pt;
+      }
+      .head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12pt;
+        font-weight: 600;
+      }
+      .head .when {
+        font-weight: 400;
+        color: var(--mute);
+        white-space: nowrap;
+      }
+      .sub {
+        color: var(--mute);
+      }
+      ul {
+        margin-top: 2.5pt;
+        padding-left: 11pt;
+      }
+      li + li {
+        margin-top: 1.5pt;
+      }
+      li::marker {
+        color: var(--ember);
+      }
+      .skills p + p {
+        margin-top: 2.5pt;
+      }
+      .skills b {
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>João Pedro Pereira Cassiano<span>.</span></h1>
+      <p class="role">Desenvolvedor Front-end · Design Developer</p>
+      <p class="contact">
+        <span>Alfenas, MG</span>
+        <span><a href="mailto:dev.jpcassiano@gmail.com">dev.jpcassiano@gmail.com</a></span>
+        <span>Portfólio: <a href="https://jpcassiano.pages.dev">jpcassiano.pages.dev</a></span>
+      </p>
+      <p class="contact" style="margin-top: 1pt">
+        <span><a href="https://www.linkedin.com/in/jo%C3%A3o-pedro-pereira-cassiano/">linkedin.com/in/joão-pedro-pereira-cassiano</a></span>
+        <span><a href="https://github.com/joaopcassiano">github.com/joaopcassiano</a></span>
+      </p>
+    </header>
+
+    <section>
+      <h2>Resumo</h2>
+      <p>
+        Estudante de Ciência da Computação (UNIFENAS, conclusão em 2026) e fundador da Vortek Boost. Desenho a interface no
+        Figma e escrevo o código com React, TypeScript e JavaScript, então o layout aprovado é o mesmo que vai para o ar.
+        Tenho projetos publicados com animações (GSAP), SEO e boa nota de desempenho, e um app mobile em React Native com
+        Firebase. Busco vaga de estágio ou de desenvolvedor front-end júnior.
+      </p>
+    </section>
+
+    <section>
+      <h2>Experiência</h2>
+      <div class="item">
+        <p class="head"><span>Fundador · Vortek Boost</span><span class="when">2026 — atual</span></p>
+        <p class="sub">Negócio próprio de tecnologia, atendendo clientes do começo ao fim do projeto</p>
+        <ul>
+          <li>Crio sites e landing pages: do layout no Figma ao código publicado, com React, TypeScript e Three.js.</li>
+          <li>Desenvolvo softwares sob medida e identidades visuais (logo e marca) para pequenos negócios.</li>
+          <li>Faço otimização de desempenho e manutenção de PCs, com diagnóstico e ajustes para cada cliente.</li>
+          <li>Cuido do atendimento, do orçamento e do prazo de cada projeto.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="head"><span>Auxiliar administrativo · UNIFAL</span><span class="when">2023 — atual</span></p>
+        <ul>
+          <li>Organizo documentos e processos com dados pessoais protegidos pela LGPD, cumprindo prazos.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="head">
+          <span>Auxiliar administrativo · Hospital Universitário Alzira Velano</span><span class="when">2022 — 2023</span>
+        </p>
+      </div>
+      <div class="item">
+        <p class="head"><span>Jovem Aprendiz · Construcar</span><span class="when">2021 — 2022</span></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projetos</h2>
+      <div class="item">
+        <p class="head"><span>Cuidado+ (TCC) · React Native, Expo, Firebase</span><span class="when">2026</span></p>
+        <ul>
+          <li>App mobile para a família acompanhar remédios, consultas e atividades de um idoso, com assistente de IA e relatórios em PDF para levar ao médico.</li>
+          <li>Landing page em HTML, CSS e JavaScript. Projeto apresentado no IX Congresso de Computação da UNIFENAS.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="head"><span>Landing page Vortek Boost · React, TypeScript, Three.js</span><span class="when">2026</span></p>
+        <ul>
+          <li>Símbolo da marca montado em 3D conforme a rolagem, demonstrações interativas dos serviços e formulário de orçamento por e-mail. vortekboost.pages.dev</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="head"><span>Portfólio pessoal · React, TypeScript, Tailwind CSS, GSAP</span><span class="when">2026</span></p>
+        <ul>
+          <li>Site com animações guiadas pela rolagem, HTML pré-renderizado para SEO, dados estruturados e carregamento rápido no celular (maior elemento em menos de 1 s). jpcassiano.pages.dev</li>
+        </ul>
+      </div>
+      <div class="item">
+        <p class="head"><span>Sistema de controle de caixa · C#, SQL Server</span></p>
+        <ul>
+          <li>App desktop para registrar entradas e saídas, com banco de dados e relatórios em PDF.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Formação</h2>
+      <div class="item">
+        <p class="head"><span>Bacharelado em Ciência da Computação · UNIFENAS</span><span class="when">Conclusão em 2026</span></p>
+      </div>
+    </section>
+
+    <section class="skills">
+      <h2>Habilidades</h2>
+      <p><b>Front-end:</b> HTML, CSS, JavaScript, TypeScript, React, Tailwind CSS, GSAP, Three.js</p>
+      <p><b>Mobile:</b> React Native, Expo, Firebase</p>
+      <p><b>Back-end e dados:</b> C#, .NET, Java, Python, C, C++, MySQL, SQL Server</p>
+      <p><b>Design e ferramentas:</b> Figma, UI/UX, design responsivo, SEO, Git, GitHub, Vite</p>
+    </section>
+
+    <section>
+      <h2>Idiomas e eventos</h2>
+      <p>Português nativo · Inglês intermediário (leitura de documentação técnica)</p>
+      <p class="sub" style="margin-top: 2.5pt">
+        IX Congresso de Computação UNIFENAS (apresentação do Cuidado+) · VII Hackathon UNIFENAS · XXXVII JOIN (Cibersegurança
+        na Prática) · XXXIII JOIN
+      </p>
+    </section>
+  </body>
+</html>
