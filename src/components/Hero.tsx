@@ -282,6 +282,8 @@ export default function Hero() {
             </div>
 
             <h1 data-reveal className="display text-[clamp(52px,7.6vw,124px)] leading-[0.92]">
+              {/* Invisível na tela: o título principal precisa dizer quem é e o que faz para o Google e leitores de tela */}
+              <span className="sr-only">JP Cassiano, design developer. </span>
               <span data-headline className="block">
                 Design que
               </span>
