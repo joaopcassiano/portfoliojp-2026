@@ -148,13 +148,13 @@ export default function Hero() {
           // ── Palavra rotativa (roda sempre; aparece quando o título é revelado) ──
           const items = gsap.utils.toArray<HTMLElement>("[data-word]");
           const hold = 2.4;
-          gsap.set(items.slice(1), { yPercent: 110 });
+          gsap.set(items.slice(1), { yPercent: 130 });
           // Um passo por vez (em vez de uma timeline com todas as trocas), para a linha nunca ficar vazia ao recomeçar
           let current = 0;
           const step = () => {
             const next = (current + 1) % items.length;
-            gsap.to(items[current], { yPercent: -110, duration: 0.9, ease: "expo.inOut" });
-            gsap.fromTo(items[next], { yPercent: 110 }, { yPercent: 0, duration: 0.9, ease: "expo.inOut" });
+            gsap.to(items[current], { yPercent: -130, duration: 0.9, ease: "expo.inOut" });
+            gsap.fromTo(items[next], { yPercent: 130 }, { yPercent: 0, duration: 0.9, ease: "expo.inOut" });
             current = next;
           };
           const rotate = gsap.timeline({ repeat: -1 }).call(step, undefined, hold);
