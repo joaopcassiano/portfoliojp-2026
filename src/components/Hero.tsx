@@ -22,31 +22,6 @@ const services = [
 // Posição do rosto na foto original (em % da imagem). É o ponto de origem do zoom
 // e o centro da máscara que revela a cor.
 const FACE = { x: "52.5%", y: "41%" };
-// Cabeça inteira (do cabelo ao queixo), em fração da altura da foto
-const HEAD = { top: 0.154, bottom: 0.588 };
-
-/**
- * Celular: zoom e deslocamento finais da foto para a cabeça inteira caber, centralizada,
- * entre o menu e o texto. Mede o espaço no próprio aparelho, porque a altura útil muda
- * de um celular para outro. Também marca onde o texto começa, para o escurecimento.
- */
-function fitHeadAboveText(root: HTMLElement) {
-  const frame = root.querySelector<HTMLElement>("[data-frame]")!;
-  const photo = root.querySelector<HTMLElement>("[data-stage]")!.parentElement!;
-  const header = root.querySelector<HTMLElement>("header")!;
-  const text = root.querySelector<HTMLElement>("[data-eyebrow]")!;
-  // offsetTop/offsetHeight ignoram as transformações das animações
-  const imgH = photo.offsetHeight;
-  const imgTop = (frame.clientHeight - imgH) / 2;
-  const textTop = text.offsetTop;
-  const slotTop = header.offsetHeight + 8;
-  const slotBottom = textTop - 20;
-  const scale = gsap.utils.clamp(0.5, 1.2, (slotBottom - slotTop) / ((HEAD.bottom - HEAD.top) * imgH));
-  const origin = imgTop + parseFloat(FACE.y) / 100 * imgH;
-  const headCenter = imgTop + ((HEAD.top + HEAD.bottom) / 2) * imgH;
-  frame.style.setProperty("--hero-text-top", `${textTop}px`);
-  return { scale, x: 0, y: (slotTop + slotBottom) / 2 - (origin + (headCenter - origin) * scale) };
-}
 
 function Photo({ color = false }: { color?: boolean }) {
   return (
@@ -96,23 +71,16 @@ export default function Hero() {
           motion: "(prefers-reduced-motion: no-preference)",
           fine: "(hover: hover) and (pointer: fine)",
           desktop: "(min-width: 1024px)",
-          phone: "(max-width: 767px)",
         },
         (ctx) => {
-          const { motion, fine, desktop, phone } = ctx.conditions as { motion: boolean; fine: boolean; desktop: boolean; phone: boolean };
-          // Enquadramento final da foto. No celular o rosto sobe para ficar acima do texto, sem ficar atrás dele.
-          const stageEnd = desktop
-            ? { scale: 1.55, x: "9vw", y: 0 }
-            : phone
-              ? fitHeadAboveText(root.current!)
-              : { scale: 1.2, x: 0, y: "-15vh" };
+          const { motion, fine, desktop } = ctx.conditions as { motion: boolean; fine: boolean; desktop: boolean };
 
           // Sem animação: mostra o estado final direto, com o rosto já colorido.
           if (!motion) {
             gsap.set("[data-reveal]", { autoAlpha: 1 });
             gsap.set("[data-cue]", { autoAlpha: 0 });
             gsap.set("[data-shade]", { autoAlpha: 1 });
-            gsap.set("[data-stage]", stageEnd);
+            gsap.set("[data-stage]", { scale: desktop ? 1.55 : 1.2, x: desktop ? "9vw" : 0, y: desktop ? 0 : "-15vh" });
             gsap.set("[data-photo='color']", { "--s": 1 });
             return;
           }
@@ -156,7 +124,7 @@ export default function Hero() {
           tl.to("[data-cue]", { autoAlpha: 0, y: 24, duration: 0.6, ease: "power1.in" }, 0)
             .to(
               "[data-stage]",
-              { ...stageEnd, duration: 4, ease: "power2.inOut" },
+              { scale: desktop ? 1.55 : 1.2, x: desktop ? "9vw" : 0, y: desktop ? 0 : "-15vh", duration: 4, ease: "power2.inOut" },
               0,
             )
             .to("[data-photo='color']", { "--s": 1, duration: 3, ease: "power1.inOut" }, 1)
@@ -254,12 +222,6 @@ export default function Hero() {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgb(9_9_10/0.88)_0%,rgb(9_9_10/0.35)_38%,transparent_60%,rgb(9_9_10/0.45)_100%)]" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgb(9_9_10/0.55)_0%,transparent_22%,transparent_55%,rgb(9_9_10/0.92)_100%)]" />
         </div>
-        {/* Celular: a foto some no escuro logo acima do texto, que fica sempre abaixo do rosto */}
-        <div
-          data-shade
-          aria-hidden="true"
-          className="pointer-events-none invisible absolute inset-0 bg-[linear-gradient(180deg,transparent_calc(var(--hero-text-top,60%)-90px),var(--color-ink)_calc(var(--hero-text-top,60%)+10px))] opacity-0 md:hidden"
-        />
         <div aria-hidden="true" className="grain pointer-events-none absolute inset-0 opacity-[0.22]" />
 
         {/* ── Nome gigante ao fundo ── */}
