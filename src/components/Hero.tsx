@@ -3,6 +3,7 @@ import { gsap, ScrollTrigger, SplitText, useGSAP } from "../lib/gsap";
 import Magnetic from "./Magnetic";
 import Navbar, { ArrowIcon } from "./Navbar";
 import Logo from "./Logo";
+import { useLocalTime } from "../hooks/useLocalTime";
 import SocialLinks from "./SocialLinks";
 import { scrollToY } from "../lib/lenis";
 import hero900Avif from "../assets/hero-900.avif";
@@ -21,18 +22,6 @@ const services = [
 // Posição do rosto na foto original (em % da imagem). É o ponto de origem do zoom
 // e o centro da máscara que revela a cor.
 const FACE = { x: "52.5%", y: "41%" };
-
-/** Relógio ao vivo no fuso de São Paulo. */
-function useLocalTime() {
-  const fmt = () =>
-    new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" }).format(new Date());
-  const [time, setTime] = useState(fmt);
-  useEffect(() => {
-    const id = setInterval(() => setTime(fmt()), 10_000);
-    return () => clearInterval(id);
-  }, []);
-  return time;
-}
 
 function Photo({ color = false }: { color?: boolean }) {
   return (

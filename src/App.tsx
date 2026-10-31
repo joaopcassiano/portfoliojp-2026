@@ -5,6 +5,8 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Projects from "./components/Projects";
 import Process from "./components/Process";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 import { scroller } from "./lib/lenis";
 
 export default function App() {
@@ -25,11 +27,15 @@ export default function App() {
   }, []);
 
   return (
-    <main>
-      <Hero />
-      <About />
-      <Projects />
-      <Process />
-    </main>
+    <>
+      <main>
+        <Hero />
+        <About />
+        <Projects />
+        <Process />
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
 }
