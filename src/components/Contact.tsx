@@ -212,7 +212,10 @@ export default function Contact() {
               ·
             </span>
             <span>
-              Alfenas, MG, agora são <span className="tabular-nums">{time}</span>
+              Alfenas, MG, agora são{" "}
+              <span className="tabular-nums" suppressHydrationWarning>
+                {time}
+              </span>
             </span>
           </p>
         </div>

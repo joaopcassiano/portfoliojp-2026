@@ -154,7 +154,9 @@ export default function Process() {
   const fontsReady = useFontsReady();
 
   const [active, setActive] = useState(0);
-  const [reduced] = useState(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  // Lido depois de montar, para o HTML gerado no build ser igual ao primeiro render no navegador
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches), []);
 
   useGSAP(
     () => {

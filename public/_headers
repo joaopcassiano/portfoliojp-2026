@@ -1,0 +1,10 @@
+# Cloudflare Pages: arquivos com hash no nome nunca mudam, então podem ficar no cache para sempre
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/videos/*
+  Cache-Control: public, max-age=2592000
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

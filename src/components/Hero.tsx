@@ -399,7 +399,9 @@ export default function Hero() {
               </div>
               <div className="text-right">
                 <p className="eyebrow text-mute">Hora local</p>
-                <p className="mt-1 text-[13px] text-bone/85 tabular-nums">{time} BRT</p>
+                <p className="mt-1 text-[13px] text-bone/85 tabular-nums" suppressHydrationWarning>
+                  {time} BRT
+                </p>
               </div>
             </div>
           </div>

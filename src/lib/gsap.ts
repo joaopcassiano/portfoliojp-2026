@@ -2,9 +2,8 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText, ScrambleTextPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 export { gsap, ScrollTrigger, SplitText, useGSAP };
