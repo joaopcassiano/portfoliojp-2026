@@ -1,5 +1,5 @@
 // Gera public/curriculo.pdf a partir de curriculo.html, usando o Edge instalado no Windows.
-// Uso: node brand/curriculo/build_pdf.cjs  (precisa do pacote puppeteer-core: npx -p puppeteer-core node ...)
+// Uso: npm install --no-save puppeteer-core && node brand/curriculo/build_pdf.cjs
 const path = require("path");
 const puppeteer = require("puppeteer-core");
 
