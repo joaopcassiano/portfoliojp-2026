@@ -5,6 +5,12 @@ import vortekDesktop from "../assets/projects/vortek-desktop.webp";
 import vortekMobile from "../assets/projects/vortek-mobile.webp";
 import vortekPoster from "../assets/projects/vortek-video-poster.webp";
 import cuidadoPoster from "../assets/projects/cuidado-video-poster.webp";
+import isabelleDesktop from "../assets/projects/isabelle-desktop.webp";
+import isabelleMobile from "../assets/projects/isabelle-mobile.webp";
+import isabellePoster from "../assets/projects/isabelle-video-poster.webp";
+import marcosDesktop from "../assets/projects/marcos-desktop.webp";
+import marcosMobile from "../assets/projects/marcos-mobile.webp";
+import marcosPoster from "../assets/projects/marcos-video-poster.webp";
 
 export type Project = {
   title: string;
@@ -54,5 +60,31 @@ export const projects: Project[] = [
     image: vortekDesktop,
     mobileImage: vortekMobile,
     video: { src: `${import.meta.env.BASE_URL}videos/vortek-apresentacao.mp4`, poster: vortekPoster, duration: "0:30" },
+  },
+  {
+    title: "Isabelle Cillo",
+    category: "Site institucional",
+    stack: [{ label: "Site", items: ["React", "Tailwind CSS", "GSAP", "Lenis"] }],
+    description:
+      "Site da fisioterapeuta Isabelle Cillo, em Alfenas. Apresenta as especialidades, explica cada etapa do atendimento, mostra a nota 5,0 no Google e leva o paciente a agendar a consulta pelo WhatsApp com a mensagem já escrita. Tem animações na rolagem, mapa que só carrega no clique e dados estruturados para o Google.",
+    year: "2026",
+    href: "https://isabellecillo.com.br/",
+    url: "https://isabellecillo.com.br/",
+    image: isabelleDesktop,
+    mobileImage: isabelleMobile,
+    video: { src: `${import.meta.env.BASE_URL}videos/isabelle-apresentacao.mp4`, poster: isabellePoster, duration: "0:24" },
+  },
+  {
+    title: "Marcos Paiva",
+    category: "Link na bio",
+    stack: [{ label: "Site", items: ["HTML", "CSS"] }],
+    description:
+      "Página de links do personal trainer Marcos Paiva, feita para a bio do Instagram. Num cartão só, reúne o agendamento de avaliação, a consultoria online e o atendimento presencial pelo WhatsApp, cada um com a mensagem pronta, além de playlist, currículo e e-mail. Em HTML e CSS puros, para abrir rápido no celular.",
+    year: "2026",
+    href: "https://marcospaivapersonal.pages.dev/",
+    url: "https://marcospaivapersonal.pages.dev/",
+    image: marcosDesktop,
+    mobileImage: marcosMobile,
+    video: { src: `${import.meta.env.BASE_URL}videos/marcos-apresentacao.mp4`, poster: marcosPoster, duration: "0:21" },
   },
 ];

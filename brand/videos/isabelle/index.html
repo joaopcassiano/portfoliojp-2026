@@ -1,0 +1,373 @@
+<!doctype html>
+<!--
+  Apresentação do site isabellecillo.com.br para o portfólio (1920×1080, 24 s).
+  Mesmo formato dos vídeos do Cuidado+ e da Vortek: abertura, o site real nos aparelhos com
+  legendas, e o encerramento com a marca. As telas são prints do site publicado.
+  Renderizar: npx hyperframes render
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Cormorant Garamond";
+        src: url("assets/fonts/cormorant-garamond.woff2") format("woff2");
+        font-weight: 300 700;
+      }
+      @font-face {
+        font-family: "Jost";
+        src: url("assets/fonts/jost.woff2") format("woff2");
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: "Hanken Grotesk";
+        src: url("assets/fonts/hanken-grotesk.woff2") format("woff2");
+        font-weight: 100 900;
+      }
+      /* Paleta do próprio site */
+      :root {
+        --off: #f7f5f0;
+        --gelo: #e9f0ef;
+        --marinho: #1f385c;
+        --marinho-profundo: #001f3f;
+        --lilas: #9b9ece;
+        --bege: #cebba2;
+        --texto: #5f6c8f;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--off);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-family: "Hanken Grotesk", sans-serif;
+        color: var(--marinho-profundo);
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+      }
+      .serif {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+      .tracked {
+        font-family: "Jost", sans-serif;
+        font-weight: 300;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+      }
+
+      /* Fundo: anel lilás como o da foto da hero do site */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--off);
+      }
+      #ring {
+        position: absolute;
+        left: 1060px;
+        top: 90px;
+        width: 900px;
+        height: 900px;
+        border: 2px solid rgb(155 158 206 / 0.45);
+        border-radius: 50%;
+      }
+
+      /* ── Abertura ── */
+      #s1 .eyebrow {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 320px;
+        text-align: center;
+        font-size: 28px;
+        color: var(--texto);
+      }
+      #s1 .line {
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 108px;
+        line-height: 1.12;
+      }
+      #s1 .line span {
+        display: inline-block;
+      }
+      #s1-l1 {
+        top: 400px;
+      }
+      #s1-l2 {
+        top: 525px;
+      }
+
+      /* ── Aparelhos ── */
+      #laptop {
+        position: absolute;
+        left: 690px;
+        top: 150px;
+        width: 1130px;
+      }
+      #laptop .lid {
+        position: relative;
+        background: #121826;
+        border-radius: 26px 26px 0 0;
+        padding: 18px 18px 22px;
+        box-shadow: 0 60px 120px -40px rgb(0 31 63 / 0.45);
+      }
+      #laptop .screen {
+        position: relative;
+        width: 1094px;
+        height: 684px;
+        overflow: hidden;
+        border-radius: 6px;
+        background: var(--off);
+      }
+      #laptop .base {
+        height: 26px;
+        margin: 0 -60px;
+        background: linear-gradient(#d9dce3, #aeb3bf);
+        border-radius: 0 0 22px 22px;
+      }
+      .screen img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+      }
+      #phone {
+        position: absolute;
+        left: 1060px;
+        top: 90px;
+        width: 430px;
+        height: 900px;
+        padding: 14px;
+        background: #121826;
+        border-radius: 64px;
+        box-shadow: 0 60px 120px -40px rgb(0 31 63 / 0.5);
+      }
+      #phone .screen {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 52px;
+        background: var(--off);
+      }
+
+      /* Legendas com linha, no padrão dos outros vídeos */
+      .callout {
+        position: absolute;
+        left: 150px;
+        width: 520px;
+      }
+      .callout .k {
+        font-size: 28px;
+        color: var(--texto);
+        font-family: "Jost", sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+      }
+      .callout .t {
+        margin-top: 8px;
+        font-size: 58px;
+        line-height: 1.08;
+      }
+      .callout .rule {
+        margin-top: 26px;
+        height: 2px;
+        width: 520px;
+        background: var(--marinho);
+        transform-origin: left center;
+      }
+
+      /* ── Encerramento ── */
+      #s4 {
+        background: var(--marinho);
+        color: var(--off);
+      }
+      #s4-logo {
+        position: absolute;
+        left: 50%;
+        top: 300px;
+        width: 520px;
+        margin-left: -260px;
+        filter: brightness(0) invert(1);
+      }
+      #s4-claim {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 520px;
+        text-align: center;
+        font-size: 78px;
+      }
+      #s4-url {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 690px;
+        text-align: center;
+        font-size: 30px;
+        font-family: "Jost", sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        color: var(--bege);
+      }
+      #s4-sub {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 745px;
+        text-align: center;
+        font-size: 28px;
+        color: rgb(247 245 240 / 0.7);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24" data-width="1920" data-height="1080">
+      <div id="bg" class="clip" data-start="0" data-duration="24" data-track-index="0">
+        <div id="ring" data-layout-allow-overflow></div>
+      </div>
+
+      <!-- 1. Abertura: a frase do site -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="3.6" data-track-index="1">
+        <p id="s1-eyebrow" class="eyebrow tracked">Isabelle Cillo · Fisioterapeuta</p>
+        <p id="s1-l1" class="line serif"><span>Movimento, bem-estar</span></p>
+        <p id="s1-l2" class="line serif"><span>e qualidade de vida.</span></p>
+      </div>
+
+      <!-- 2. O site no computador -->
+      <div id="s2" class="scene clip" data-start="3.6" data-duration="12" data-track-index="2">
+        <div id="laptop">
+          <div class="lid">
+            <div class="screen">
+              <img id="d1" src="assets/d-inicio.webp" alt="" />
+              <img id="d2" src="assets/d-especialidades.webp" alt="" />
+              <img id="d3" src="assets/d-atendimento.webp" alt="" />
+              <img id="d4" src="assets/d-depoimentos.webp" alt="" />
+            </div>
+          </div>
+          <div class="base"></div>
+        </div>
+        <div id="c1" class="callout" style="top: 400px">
+          <p class="k">Abertura</p>
+          <p class="t serif">O nome e a especialidade em destaque</p>
+          <div class="rule"></div>
+        </div>
+        <div id="c2" class="callout" style="top: 400px">
+          <p class="k">Como posso te ajudar</p>
+          <p class="t serif">Quatro áreas de atendimento</p>
+          <div class="rule"></div>
+        </div>
+        <div id="c3" class="callout" style="top: 400px">
+          <p class="k">Como é o atendimento</p>
+          <p class="t serif">Cada etapa explicada para o paciente</p>
+          <div class="rule"></div>
+        </div>
+        <div id="c4" class="callout" style="top: 400px">
+          <p class="k">Depoimentos</p>
+          <p class="t serif">Nota 5,0 no Google, com 28 avaliações</p>
+          <div class="rule"></div>
+        </div>
+      </div>
+
+      <!-- 3. O site no celular -->
+      <div id="s3" class="scene clip" data-start="15.6" data-duration="5" data-track-index="3">
+        <div id="phone">
+          <div class="screen">
+            <img id="m1" src="assets/m-inicio.webp" alt="" />
+            <img id="m2" src="assets/m-especialidades.webp" alt="" />
+            <img id="m3" src="assets/m-contato.webp" alt="" />
+          </div>
+        </div>
+        <div id="c5" class="callout" style="top: 400px">
+          <p class="k">No celular</p>
+          <p class="t serif">Agendar a consulta pelo WhatsApp em um toque</p>
+          <div class="rule"></div>
+        </div>
+      </div>
+
+      <!-- 4. Encerramento -->
+      <div id="s4" class="scene clip" data-start="20.6" data-duration="3.4" data-track-index="4">
+        <img id="s4-logo" src="assets/logo-nome.webp" alt="Isabelle Cillo" />
+        <p id="s4-claim" class="serif">Vamos cuidar do seu movimento?</p>
+        <p id="s4-url">isabellecillo.com.br</p>
+        <p id="s4-sub">Fisioterapeuta em Alfenas, MG</p>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const ease = "expo.out";
+
+      // 1. Abertura: rótulo, depois a frase sobe linha por linha
+      tl.fromTo("#s1-eyebrow", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease }, 0.2);
+      tl.fromTo("#s1-l1 span", { yPercent: 110 }, { yPercent: 0, duration: 1.1, ease }, 0.45);
+      tl.fromTo("#s1-l2 span", { yPercent: 110 }, { yPercent: 0, duration: 1.1, ease }, 0.65);
+      tl.fromTo("#ring", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 2.4, ease: "power2.out" }, 0.3);
+      tl.to(["#s1-l1 span", "#s1-l2 span", "#s1-eyebrow"], { yPercent: -110, opacity: 0, duration: 0.55, ease: "power3.in", stagger: 0.05 }, 3.0);
+
+      // 2. Computador: entra, troca de tela a cada legenda e aproxima devagar
+      const S2 = 3.6;
+      tl.fromTo("#laptop", { y: 220, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease }, S2);
+      tl.fromTo("#laptop", { scale: 1 }, { scale: 1.04, duration: 11, ease: "none" }, S2 + 0.6);
+      const screens = ["#d1", "#d2", "#d3", "#d4"];
+      const callouts = ["#c1", "#c2", "#c3", "#c4"];
+      const at = [S2 + 0.4, S2 + 3.2, S2 + 6, S2 + 8.8];
+      gsap.set(screens.slice(1), { opacity: 0 });
+      callouts.forEach((c, i) => {
+        const t = at[i];
+        if (i > 0) {
+          // a tela nova sobe por cima da anterior, como uma rolagem
+          tl.fromTo(screens[i], { yPercent: 18, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.9, ease: "power3.inOut" }, t - 0.2);
+        }
+        tl.fromTo(`${c} .k`, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease }, t + 0.4);
+        tl.fromTo(`${c} .t`, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease }, t + 0.5);
+        tl.fromTo(`${c} .rule`, { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.inOut" }, t + 0.7);
+        if (i < callouts.length - 1) {
+          tl.to(c, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, at[i + 1] - 0.3);
+        }
+      });
+      tl.to(["#laptop", "#c4"], { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, S2 + 11.4);
+
+      // 3. Celular: sobe, rola pelas telas e aponta o agendamento
+      const S3 = 15.6;
+      gsap.set(["#m2", "#m3"], { opacity: 0 });
+      tl.fromTo("#phone", { y: 260, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease }, S3);
+      tl.fromTo("#m2", { yPercent: 25, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.8, ease: "power3.inOut" }, S3 + 1.6);
+      tl.fromTo("#m3", { yPercent: 25, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.8, ease: "power3.inOut" }, S3 + 3.0);
+      tl.fromTo("#c5 .k", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7, ease }, S3 + 0.5);
+      tl.fromTo("#c5 .t", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.9, ease }, S3 + 0.6);
+      tl.fromTo("#c5 .rule", { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: "power3.inOut" }, S3 + 0.8);
+
+      // 4. Encerramento: a marca, a pergunta do site e o endereço
+      const S4 = 20.6;
+      tl.fromTo("#s4-logo", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1, ease }, S4 + 0.2);
+      tl.fromTo("#s4-claim", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1, ease }, S4 + 0.5);
+      tl.fromTo(["#s4-url", "#s4-sub"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease, stagger: 0.12 }, S4 + 0.9);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

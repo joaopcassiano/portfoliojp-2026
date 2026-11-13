@@ -3,3 +3,8 @@ dist
 *.local
 *.tsbuildinfo
 dist-ssr
+brand/videos/*/renders
+brand/videos/*/.hyperframes
+brand/videos/*/node_modules
+brand/videos/*/CLAUDE.md
+brand/videos/*/AGENTS.md

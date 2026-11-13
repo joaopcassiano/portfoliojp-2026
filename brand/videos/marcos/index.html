@@ -1,0 +1,388 @@
+<!doctype html>
+<!--
+  Apresentação do site marcospaivapersonal.pages.dev para o portfólio (1920×1080, 21 s).
+  Mesmo formato dos vídeos do Cuidado+ e da Vortek: abertura, o site real nos aparelhos com
+  legendas, e o encerramento com a marca. As telas são prints do site publicado e a mensagem
+  é o texto pronto que o botão "Agendar avaliação" abre no WhatsApp.
+  Renderizar: npx hyperframes render
+-->
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Archivo";
+        src: url("assets/fonts/archivo.woff2") format("woff2");
+        font-weight: 100 900;
+        font-stretch: 62% 125%;
+      }
+      @font-face {
+        font-family: "Hanken Grotesk";
+        src: url("assets/fonts/hanken-grotesk.woff2") format("woff2");
+        font-weight: 100 900;
+      }
+      /* Paleta do próprio site */
+      :root {
+        --bg: #000000;
+        --tile: #121212;
+        --line: #2a2a2a;
+        --ink: #ffffff;
+        --yellow: #fabd03;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-family: "Archivo", sans-serif;
+        color: var(--ink);
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* Fundo: a faixa amarela inclinada do cartão do site */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(60% 70% at 70% 50%, #161616, #000 70%);
+      }
+      #slash {
+        position: absolute;
+        left: -200px;
+        top: 760px;
+        width: 2400px;
+        height: 10px;
+        background: var(--yellow);
+        transform-origin: left center;
+      }
+
+      /* ── Abertura ── */
+      #s1-eyebrow {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 330px;
+        text-align: center;
+        font-family: "Hanken Grotesk", sans-serif;
+        font-size: 30px;
+        color: rgb(255 255 255 / 0.75);
+      }
+      .big {
+        position: absolute;
+        left: 0;
+        right: 0;
+        overflow: hidden;
+        text-align: center;
+        font-weight: 900;
+        font-stretch: 112%;
+        text-transform: uppercase;
+        line-height: 1;
+        font-size: 150px;
+        letter-spacing: -0.01em;
+      }
+      .big span {
+        display: inline-block;
+      }
+      #s1-l1 {
+        top: 400px;
+      }
+      #s1-l2 {
+        top: 555px;
+        color: var(--yellow);
+      }
+
+      /* ── Aparelhos ── */
+      #phone {
+        position: absolute;
+        left: 990px;
+        top: 90px;
+        width: 430px;
+        height: 900px;
+        padding: 14px;
+        background: #1c1c1e;
+        border-radius: 64px;
+        box-shadow: 0 0 0 2px #2c2c2e, 0 60px 140px -30px rgb(0 0 0 / 0.9);
+      }
+      #phone .screen {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 52px;
+        background: #000;
+      }
+      .screen img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+      }
+      /* Destaque sobre o botão "Agendar avaliação" do print */
+      #hl {
+        position: absolute;
+        left: 18px;
+        top: 556px;
+        width: 368px;
+        height: 72px;
+        border: 4px solid #fff;
+        border-radius: 6px;
+      }
+      #laptop {
+        position: absolute;
+        left: 690px;
+        top: 150px;
+        width: 1130px;
+      }
+      #laptop .lid {
+        background: #1c1c1e;
+        border-radius: 26px 26px 0 0;
+        padding: 18px 18px 22px;
+        box-shadow: 0 0 0 2px #2c2c2e, 0 60px 140px -30px rgb(0 0 0 / 0.9);
+      }
+      #laptop .screen {
+        position: relative;
+        width: 1094px;
+        height: 684px;
+        overflow: hidden;
+        border-radius: 6px;
+        background: #000;
+      }
+      #laptop .base {
+        height: 26px;
+        margin: 0 -60px;
+        background: linear-gradient(#3a3a3c, #1c1c1e);
+        border-radius: 0 0 22px 22px;
+      }
+
+      /* Mensagem que o botão abre no WhatsApp (texto real do link) */
+      #msg {
+        position: absolute;
+        left: 1460px;
+        top: 360px;
+        width: 340px;
+        padding: 22px 24px;
+        background: #fff;
+        color: #111;
+        border-radius: 22px 22px 22px 6px;
+        font-family: "Hanken Grotesk", sans-serif;
+        font-size: 28px;
+        line-height: 1.3;
+        box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.8);
+      }
+      #msg .from {
+        font-size: 28px;
+        font-weight: 700;
+        color: #128c7e;
+      }
+      #msg p + p {
+        margin-top: 10px;
+      }
+
+      /* Legendas com linha, no padrão dos outros vídeos */
+      .callout {
+        position: absolute;
+        left: 150px;
+        width: 560px;
+      }
+      .callout .k {
+        font-family: "Hanken Grotesk", sans-serif;
+        font-size: 28px;
+        color: var(--yellow);
+      }
+      .callout .t {
+        margin-top: 10px;
+        font-size: 66px;
+        font-weight: 800;
+        line-height: 1.04;
+        text-transform: uppercase;
+        font-stretch: 100%;
+      }
+      .callout .rule {
+        margin-top: 28px;
+        height: 3px;
+        width: 560px;
+        background: var(--yellow);
+        transform-origin: left center;
+      }
+
+      /* ── Encerramento ── */
+      #s5-logo {
+        position: absolute;
+        left: 50%;
+        top: 250px;
+        width: 620px;
+        margin-left: -310px;
+      }
+      #s5-cta {
+        position: absolute;
+        left: 50%;
+        top: 600px;
+        width: 560px;
+        margin-left: -280px;
+        padding: 26px 0;
+        text-align: center;
+        background: var(--yellow);
+        color: #000;
+        font-size: 40px;
+        font-weight: 800;
+        text-transform: uppercase;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%);
+      }
+      #s5-url {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 760px;
+        text-align: center;
+        font-family: "Hanken Grotesk", sans-serif;
+        font-size: 32px;
+      }
+      #s5-ig {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 810px;
+        text-align: center;
+        font-family: "Hanken Grotesk", sans-serif;
+        font-size: 28px;
+        color: rgb(255 255 255 / 0.65);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="21" data-width="1920" data-height="1080">
+      <div id="bg" class="clip" data-start="0" data-duration="21" data-track-index="0">
+        <div id="slash" data-layout-allow-overflow></div>
+      </div>
+
+      <!-- 1. Abertura -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="3.4" data-track-index="1">
+        <p id="s1-eyebrow">Presencial em Alfenas (MG) e online</p>
+        <p id="s1-l1" class="big"><span>Personal</span></p>
+        <p id="s1-l2" class="big"><span>Trainer</span></p>
+      </div>
+
+      <!-- 2. O site no celular, e a mensagem pronta do WhatsApp -->
+      <div id="s2" class="scene clip" data-start="3.4" data-duration="11.4" data-track-index="2">
+        <div id="phone">
+          <div class="screen">
+            <img id="m1" src="assets/m-inicio.webp" alt="" />
+            <div id="hl"></div>
+          </div>
+        </div>
+        <div id="msg">
+          <p class="from">Para Marcos Paiva</p>
+          <p>Olá, Marcos! Vim pelo seu link na bio e quero agendar uma avaliação.</p>
+          <p>Meu objetivo é: ___</p>
+          <p>Já treino? ( ) Sim ( ) Não</p>
+        </div>
+        <div id="c1" class="callout" style="top: 380px">
+          <p class="k">Link na bio</p>
+          <p class="t">Tudo em uma tela só</p>
+          <div class="rule"></div>
+        </div>
+        <div id="c2" class="callout" style="top: 380px">
+          <p class="k">Agendar avaliação</p>
+          <p class="t">Direto no WhatsApp</p>
+          <div class="rule"></div>
+        </div>
+        <div id="c3" class="callout" style="top: 380px">
+          <p class="k">Mensagem pronta</p>
+          <p class="t">O aluno só completa o objetivo</p>
+          <div class="rule"></div>
+        </div>
+      </div>
+
+      <!-- 3. O mesmo cartão no computador -->
+      <div id="s3" class="scene clip" data-start="14.8" data-duration="3" data-track-index="3">
+        <div id="laptop">
+          <div class="lid">
+            <div class="screen">
+              <img id="d1" src="assets/d-inicio.webp" alt="" />
+            </div>
+          </div>
+          <div class="base"></div>
+        </div>
+        <div id="c4" class="callout" style="top: 380px">
+          <p class="k">No computador</p>
+          <p class="t">O mesmo cartão, no centro</p>
+          <div class="rule"></div>
+        </div>
+      </div>
+
+      <!-- 4. Encerramento -->
+      <div id="s4" class="scene clip" data-start="17.8" data-duration="3.2" data-track-index="4">
+        <img id="s5-logo" src="assets/logo.png" alt="Marcos Paiva Personal Trainer" />
+        <p id="s5-cta">Agende sua avaliação</p>
+        <p id="s5-url">marcospaivapersonal.pages.dev</p>
+        <p id="s5-ig">@marcos_ppaiva_</p>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const ease = "expo.out";
+
+      // 1. Abertura: a faixa amarela corta a tela e o título sobe
+      tl.fromTo("#slash", { scaleX: 0, rotation: -8 }, { scaleX: 1, rotation: -8, duration: 0.9, ease: "power4.out" }, 0);
+      tl.fromTo("#s1-eyebrow", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease }, 0.15);
+      tl.fromTo("#s1-l1 span", { yPercent: 110 }, { yPercent: 0, duration: 1, ease }, 0.3);
+      tl.fromTo("#s1-l2 span", { yPercent: 110 }, { yPercent: 0, duration: 1, ease }, 0.45);
+      tl.to(["#s1-l1 span", "#s1-l2 span", "#s1-eyebrow"], { yPercent: -110, opacity: 0, duration: 0.5, ease: "power3.in", stagger: 0.05 }, 2.9);
+      tl.to("#slash", { opacity: 0.35, duration: 0.6 }, 2.9);
+
+      // 2. Celular, depois o botão em destaque e a mensagem que ele abre
+      const S2 = 3.4;
+      tl.fromTo("#phone", { y: 260, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease }, S2);
+      tl.fromTo("#phone", { scale: 1 }, { scale: 1.05, duration: 10, ease: "none" }, S2 + 0.8);
+      const callout = (c, t, out) => {
+        tl.fromTo(`${c} .k`, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease }, t);
+        tl.fromTo(`${c} .t`, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease }, t + 0.1);
+        tl.fromTo(`${c} .rule`, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, t + 0.3);
+        if (out) tl.to(c, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, out);
+      };
+      callout("#c1", S2 + 0.5, S2 + 3.2);
+      callout("#c2", S2 + 3.5, S2 + 6.6);
+      tl.fromTo("#hl", { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, S2 + 3.7);
+      tl.to("#hl", { opacity: 0, duration: 0.3 }, S2 + 6.9);
+      // o toque no botão abre a mensagem pronta
+      tl.fromTo("#msg", { opacity: 0, y: 40, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "back.out(1.6)" }, S2 + 6.9);
+      tl.fromTo("#msg p", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease, stagger: 0.25 }, S2 + 7.2);
+      callout("#c3", S2 + 7.0);
+      tl.to(["#phone", "#msg", "#c3"], { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, S2 + 10.8);
+
+      // 3. Computador
+      const S3 = 14.8;
+      tl.fromTo("#laptop", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease }, S3);
+      callout("#c4", S3 + 0.4);
+      tl.to(["#laptop", "#c4"], { opacity: 0, y: -40, duration: 0.45, ease: "power2.in" }, S3 + 2.5);
+
+      // 4. Encerramento: logo, o chamado do site e onde encontrar
+      const S4 = 17.8;
+      tl.fromTo("#s5-logo", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.9, ease }, S4 + 0.1);
+      tl.fromTo("#s5-cta", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease }, S4 + 0.5);
+      tl.fromTo(["#s5-url", "#s5-ig"], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease, stagger: 0.12 }, S4 + 0.8);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
