@@ -6,6 +6,7 @@ import Logo from "./Logo";
 import { useLocalTime } from "../hooks/useLocalTime";
 import SocialLinks from "./SocialLinks";
 import { scrollToY } from "../lib/lenis";
+import { whenPreloaded } from "../lib/preloader";
 import hero900Avif from "../assets/hero-900.avif";
 import hero900Webp from "../assets/hero-900.webp";
 import hero1672Avif from "../assets/hero-1672.avif";
@@ -92,9 +93,9 @@ export default function Hero() {
           // Torna tudo visível antes de criar os "from", que então aplicam o estado inicial na hora.
           gsap.set("[data-reveal]", { autoAlpha: 1 });
 
-          // ── Abertura (no carregamento): só a foto e o convite para rolar ──
-          gsap
-            .timeline({ defaults: { ease: "expo.out" } })
+          // ── Abertura (quando o preloader sai): só a foto e o convite para rolar ──
+          const opening = gsap
+            .timeline({ paused: true, defaults: { ease: "expo.out" } })
             .fromTo(
               "[data-frame]",
               { clipPath: "inset(18% 26% 18% 26% round 220px)" },
@@ -107,6 +108,7 @@ export default function Hero() {
               0,
             )
             .from("[data-cue-item]", { autoAlpha: 0, y: 24, stagger: 0.12, duration: 1.2 }, 1.2);
+          whenPreloaded(() => opening.play());
 
           // ── Scroll: aproxima do rosto, colore e revela um elemento por vez ──
           const tl = gsap.timeline({

@@ -8,6 +8,7 @@ import Process from "./components/Process";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import { scroller } from "./lib/lenis";
+import { whenPreloaded } from "./lib/preloader";
 
 export default function App() {
   // Rolagem suave sincronizada com o ScrollTrigger (base para as animações de scroll).
@@ -15,6 +16,12 @@ export default function App() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({ lerp: 0.1, anchors: true });
     scroller.lenis = lenis;
+    // Sem rolagem enquanto o preloader está na tela
+    lenis.stop();
+    whenPreloaded(() => {
+      lenis.scrollTo(0, { immediate: true, force: true });
+      lenis.start();
+    });
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);

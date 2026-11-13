@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="is-loading">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -98,8 +98,57 @@
         ]
       }
     </script>
+  
+    <!-- Recarregar (F5) sempre volta ao topo: o navegador não guarda a posição da rolagem -->
+    <script>
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      addEventListener("beforeunload", function () { scrollTo(0, 0); });
+    </script>
+    <!-- Preloader: estilo aqui para aparecer já na primeira pintura (o controle fica em src/lib/preloader.ts) -->
+    <style>
+      html.is-loading { overflow: hidden; }
+      #preloader {
+        position: fixed; inset: 0; z-index: 200;
+        display: flex; flex-direction: column; justify-content: space-between;
+        padding: 20px; background: #09090a; color: #ede9e3;
+        font-family: "Instrument Sans Variable", "Instrument Sans", system-ui, sans-serif;
+      }
+      #preloader [data-pl-mask] { overflow: hidden; }
+      #preloader [data-pl-mask] > * { display: block; }
+      .pl-top { display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; color: #9a968f; }
+      .pl-mark { position: absolute; left: 50%; top: 50%; translate: -50% -50%; }
+      .pl-mark svg { display: block; height: 64px; width: auto; fill: #ede9e3; }
+      .pl-dot { fill: #ff5a2c; transform-origin: 24px 84px; animation: pl-pulse 1.2s ease-in-out infinite; }
+      @keyframes pl-pulse { 50% { transform: scale(0.6); opacity: 0.6; } }
+      .pl-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+      .pl-label { font-size: 13px; font-weight: 500; color: #9a968f; padding-bottom: 14px; }
+      .pl-count {
+        font-size: clamp(72px, 13vw, 200px); font-weight: 500; line-height: 0.82;
+        letter-spacing: -0.05em; font-variant-numeric: tabular-nums;
+      }
+      .pl-count small { font-size: 0.22em; letter-spacing: 0; color: #9a968f; margin-left: 0.15em; vertical-align: top; }
+      .pl-line { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgb(237 233 227 / 0.08); }
+      .pl-line span { display: block; height: 100%; background: #ff5a2c; transform: scaleX(0); transform-origin: left; }
+      @media (min-width: 768px) { #preloader { padding: 28px 40px 32px; } }
+      @media (prefers-reduced-motion: reduce) { .pl-dot { animation: none; } }
+    </style>
+    <noscript><style>html.is-loading { overflow: auto; } #preloader { display: none; }</style></noscript>
   </head>
   <body>
+    <div id="preloader" aria-hidden="true">
+      <div class="pl-top">
+        <span data-pl-mask><span>JP Cassiano</span></span>
+        <span data-pl-mask><span>Portfólio ©2026</span></span>
+      </div>
+      <div class="pl-mark" data-pl-mask>
+        <svg viewBox="8 0 152 176"><path fill-rule="evenodd" d="M64 0H104A56 56 0 0 1 104 112H96V176H64Z M96 32V80H104A24 24 0 0 0 104 32Z"/><path d="M72 176H64A56 56 0 0 1 8 120H40A24 24 0 0 0 64 144H72Z"/><circle class="pl-dot" cx="24" cy="84" r="16"/></svg>
+      </div>
+      <div class="pl-bottom">
+        <span class="pl-label" data-pl-mask><span>Design Developer</span></span>
+        <span class="pl-count" data-pl-mask><span><span data-pl-count>000</span><small>%</small></span></span>
+      </div>
+      <div class="pl-line"><span data-pl-bar></span></div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
