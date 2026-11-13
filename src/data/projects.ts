@@ -72,7 +72,7 @@ export const projects: Project[] = [
     url: "https://isabellecillo.com.br/",
     image: isabelleDesktop,
     mobileImage: isabelleMobile,
-    video: { src: `${import.meta.env.BASE_URL}videos/isabelle-apresentacao.mp4`, poster: isabellePoster, duration: "0:24" },
+    video: { src: `${import.meta.env.BASE_URL}videos/isabelle-apresentacao.mp4?v=2`, poster: isabellePoster, duration: "0:24" },
   },
   {
     title: "Marcos Paiva",
@@ -85,6 +85,6 @@ export const projects: Project[] = [
     url: "https://marcospaivapersonal.pages.dev/",
     image: marcosDesktop,
     mobileImage: marcosMobile,
-    video: { src: `${import.meta.env.BASE_URL}videos/marcos-apresentacao.mp4`, poster: marcosPoster, duration: "0:21" },
+    video: { src: `${import.meta.env.BASE_URL}videos/marcos-apresentacao.mp4?v=2`, poster: marcosPoster, duration: "0:21" },
   },
 ];
